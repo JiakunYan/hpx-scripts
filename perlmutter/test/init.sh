@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # exit when any command fails
 set -e
@@ -25,14 +25,14 @@ mkdir_s ./init
 cd init
 
 # setup module environment
-module purge
-module load gcc
-module load cmake
-module load boost
-module load hwloc
-module load openmpi
-module load papi
-module load python
+#module purge
+#module load gcc
+#module load cmake
+#module load boost
+#module load hwloc
+#module load openmpi
+#module load papi
+#module load python
 export CC=gcc
 export CXX=g++
 
@@ -47,24 +47,28 @@ mkdir -p build
 cd build
 echo "Running cmake..."
 HPX_INSTALL_PATH=$(realpath "../install")
-cmake -GNinja \
-      -DCMAKE_INSTALL_PREFIX=${HPX_INSTALL_PATH} \
+cmake -DCMAKE_INSTALL_PREFIX=${HPX_INSTALL_PATH} \
+      -DHPX_WITH_PARALLEL_TESTS_BIND_NONE=ON \
       -DCMAKE_BUILD_TYPE=Debug \
+      -DHPX_WITH_CHECK_MODULE_DEPENDENCIES=ON \
+      -DHPX_WITH_CXX_STANDARD=17 \
       -DHPX_WITH_MALLOC=system \
+      -DHPX_WITH_FETCH_ASIO=ON \
+      -DHPX_WITH_COMPILER_WARNINGS=ON \
+      -DHPX_WITH_COMPILER_WARNINGS_AS_ERRORS=ON \
       -DHPX_WITH_PARCELPORT_MPI=ON \
       -DHPX_WITH_PARCELPORT_LCI=ON \
-      -DHPX_WITH_FETCH_ASIO=ON \
-      -DHPX_WITH_PARALLEL_TESTS_BIND_NONE=ON \
       -DHPX_WITH_FETCH_LCI=ON \
-      -DFETCHCONTENT_SOURCE_DIR_LCI=${LCI_SOURCE_PATH} \
-      -DLCI_SERVER=ibv \
-      -DHPX_WITH_PKGCONFIG=OFF \
+      -DLCI_SERVER=ofi \
+      -DBOOST_ROOT=$HOME/opt/boost_1_78_0 \
       -L \
       ${HPX_SOURCE_PATH} | tee init-cmake.log 2>&1 || { echo "cmake error!"; exit 1; }
+#      -DHPX_WITH_FETCH_ASIO=ON \
+#      -DFETCHCONTENT_SOURCE_DIR_LCI=${LCI_SOURCE_PATH} \
 cmake -LAH . >> init-cmake.log
 echo "Running make..."
-ninja | tee init-make.log 2>&1 || { echo "make error!"; exit 1; }
+make -j | tee init-make.log 2>&1 || { echo "make error!"; exit 1; }
 echo "Installing HPX to ${HPX_INSTALL_PATH}"
 mkdir -p ${HPX_INSTALL_PATH}
-ninja install > init-install.log 2>&1 || { echo "install error!"; exit 1; }
+make install > init-install.log 2>&1 || { echo "install error!"; exit 1; }
 mv *.log ../log

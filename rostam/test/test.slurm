@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition=medusa
+#SBATCH --partition=jenkins-compute
 #SBATCH --time=2:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
@@ -22,4 +22,5 @@ export CXX=g++
 PATH_TO_EXE=${1:-./init/build/}
 
 cd ${PATH_TO_EXE}
+time ninja tests
 time ctest --verbose --timeout 300

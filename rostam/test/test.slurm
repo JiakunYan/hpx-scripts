@@ -3,7 +3,7 @@
 #SBATCH --time=2:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
-#SBATCH --job-name=test
+#SBATCH --job-name=hpx-test
 #SBATCH --output=slurm_output.%x-o%j
 #SBATCH --error=slurm_error.%x-o%j
 

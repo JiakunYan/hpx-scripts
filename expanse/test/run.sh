@@ -8,7 +8,7 @@ source ../../include/scripts.sh
 # get the HPX source path via environment variable or default value
 HPX_SOURCE_PATH=$(realpath "${HPX_SOURCE_PATH:-../../../hpx}")
 
-TASKS=("test2.slurm")
+TASKS=("test.slurm")
 sbatch_path=$(realpath "${sbatch_path:-.}")
 build_path=$(realpath "${exe_path:-init/build/}")
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="tmp-gcc-12-debug"
+	BuildStamp="20230123-2331-tmp"
+	Name="lsu(rostam)"
+	Generator="ctest-3.23.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="medusa08.rostam.cct.lsu.edu"
+	OSRelease="4.18.0-425.3.1.el8.x86_64"
+	OSVersion="#1 SMP Fri Sep 30 11:45:06 EDT 2022"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="85"
+	ProcessorCacheSize="28160"
+	NumberOfLogicalCPU="40"
+	NumberOfPhysicalCPU="40"
+	TotalVirtualMemory="4095"
+	TotalPhysicalMemory="95001"
+	LogicalProcessorsPerPhysical="1"
+	ProcessorClockFrequency="3700"
+	>
+	<Build>
+		<StartDateTime>Jan 23 17:32 CST</StartDateTime>
+		<StartBuildTime>1674516777</StartBuildTime>
+		<BuildCommand>/opt/apps/cmake/3.23.2/bin/cmake --build . --config "Release" --target "tests" -- -k0 -j 20</BuildCommand>
+		<Error>
+			<BuildLogLine>1</BuildLogLine>
+			<Text>Error: could not load cache</Text>
+			<PreContext></PreContext>
+			<PostContext></PostContext>
+			<RepeatCount>0</RepeatCount>
+		</Error>
+		<Warning>
+			<BuildLogLine>1</BuildLogLine>
+			<Text>*** WARNING non-zero return value in ctest from: /opt/apps/cmake/3.23.2/bin/cmake</Text>
+			<PreContext></PreContext>
+			<PostContext></PostContext>
+			<RepeatCount>0</RepeatCount>
+		</Warning>
+		<Log Encoding="base64" Compression="bin/gzip"/>
+		<EndDateTime>Jan 23 17:32 CST</EndDateTime>
+		<EndBuildTime>1674516777</EndBuildTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Build>
+</Site>

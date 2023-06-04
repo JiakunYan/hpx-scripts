@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Update mode="Client" Generator="ctest-3.23.2">
+	<Site>lsu(rostam)</Site>
+	<BuildName>tmp-gcc-12-debug</BuildName>
+	<BuildStamp>20230123-2331-tmp</BuildStamp>
+	<StartDateTime>Jan 23 17:31 CST</StartDateTime>
+	<StartTime>1674516716</StartTime>
+	<UpdateCommand></UpdateCommand>
+	<UpdateType>GIT</UpdateType>
+	<EndDateTime>Jan 23 17:31 CST</EndDateTime>
+	<EndTime>1674516716</EndTime>
+	<ElapsedMinutes>0</ElapsedMinutes>
+	<UpdateReturnStatus/>
+</Update>

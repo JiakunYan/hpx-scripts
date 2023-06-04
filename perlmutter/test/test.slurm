@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --qos=debug
+#SBATCH --qos=benchmark
 #SBATCH --account=xpress_g
 #SBATCH --constraint=gpu
 #SBATCH --gpus=4

@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="tmp-gcc-12-debug"
+	BuildStamp="20230123-2331-tmp"
+	Name="lsu(rostam)"
+	Generator="ctest-3.23.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="medusa08.rostam.cct.lsu.edu"
+	OSRelease="4.18.0-425.3.1.el8.x86_64"
+	OSVersion="#1 SMP Fri Sep 30 11:45:06 EDT 2022"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="85"
+	ProcessorCacheSize="28160"
+	NumberOfLogicalCPU="40"
+	NumberOfPhysicalCPU="40"
+	TotalVirtualMemory="4095"
+	TotalPhysicalMemory="95001"
+	LogicalProcessorsPerPhysical="1"
+	ProcessorClockFrequency="3700"
+	>
+	<Configure>
+		<StartDateTime>Jan 23 17:31 CST</StartDateTime>
+		<StartConfigureTime>1674516716</StartConfigureTime>
+		<ConfigureCommand>/opt/apps/cmake/3.23.2/bin/cmake /home/jiakun/workspace/hpx-lci-pool -GNinja -B./build/gcc-12-debug -DHPX_WITH_PARALLEL_TESTS_BIND_NONE=ON  -DCMAKE_BUILD_TYPE=debug -DHPX_WITH_CHECK_MODULE_DEPENDENCIES=ON -DHPX_WITH_CXX_STANDARD=20 -DHPX_WITH_MALLOC=system -DHPX_WITH_FETCH_ASIO=ON -DHPX_WITH_COMPILER_WARNINGS=ON -DHPX_WITH_COMPILER_WARNINGS_AS_ERRORS=ON -DHPX_WITH_PARCELPORT_MPI=ON -DHPX_WITH_PARCELPORT_LCI=ON -DHPX_WITH_FETCH_LCI=ON -DHPX_WITH_PARCELPORT_LCI_BACKEND=ibv -DHPX_WITH_DATAPAR_BACKEND=STD_EXPERIMENTAL_SIMD</ConfigureCommand>
+		<Log>-- The CXX compiler identification is GNU 12.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/apps/gcc/12.2.0/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using C++20
+-- CMake version: 3.23.2
+-- HPX version: 1.9.0
+-- Building modules as STATIC (whole-archive) libraries
+-- Nice threadlevel is disabled.
+-- Stack traces are enabled.
+-- Compiling with the native toolset
+-- Performing Test HPX_WITH_CXX11_ATOMIC_INIT_FLAG - Success
+-- Performing Test HPX_WITH_CXX11_ATOMIC - Success
+-- Performing Test HPX_WITH_CXX11_ATOMIC_128BIT - Failed
+-- Performing Test HPX_WITH_CXX11_ATOMIC_128BIT - Success
+-- Performing Test HPX_WITH_CXX11_STD_QUICK_EXIT - Success
+-- Performing Test HPX_WITH_CXX11_SHARED_PTR_LWG3018 - Success
+-- Performing Test HPX_WITH_C11_ALIGNED_ALLOC - Failed
+-- Performing Test HPX_WITH_CXX17_STD_ALIGNED_ALLOC - Failed
+-- Performing Test HPX_WITH_CXX17_STD_EXECUTION_POLICES - Success
+-- Performing Test HPX_WITH_CXX17_FILESYSTEM - Success
+-- Performing Test HPX_WITH_CXX17_HARDWARE_DESTRUCTIVE_INTERFERENCE_SIZE - Success
+-- Performing Test HPX_WITH_CXX17_ALIGNED_NEW - Success
+-- Performing Test HPX_WITH_CXX17_SHARED_PTR_ARRAY - Success
+-- Performing Test HPX_WITH_CXX17_STD_TRANSFORM_SCAN_ALGORITHMS - Success
+-- Performing Test HPX_WITH_CXX17_STD_SCAN_ALGORITHMS - Success
+-- Performing Test HPX_WITH_CXX17_COPY_ELISION - Success
+-- Performing Test HPX_WITH_CXX17_OPTIONAL_COPY_ELISION - Success
+-- Performing Test HPX_WITH_CXX20_COROUTINES - Success
+-- Performing Test HPX_WITH_CXX20_EXPERIMENTAL_SIMD - Success
+-- Performing Test HPX_WITH_CXX20_LAMBDA_CAPTURE - Success
+-- Performing Test HPX_WITH_CXX20_SOURCE_LOCATION - Failed
+-- Performing Test HPX_WITH_CXX20_PERFECT_PACK_CAPTURE - Failed
+-- Performing Test HPX_WITH_CXX20_NO_UNIQUE_ADDRESS_ATTRIBUTE - Success
+-- Performing Test HPX_WITH_CXX20_PAREN_INITIALIZATION_OF_AGGREGATES - Success
+-- Performing Test HPX_WITH_CXX20_STD_DISABLE_SIZED_SENTINEL_FOR - Success
+-- Performing Test HPX_WITH_CXX20_STD_ENDIAN - Success
+-- Performing Test HPX_WITH_CXX20_STD_EXECUTION_POLICES - Success
+-- Performing Test HPX_WITH_CXX20_STD_RANGES_ITER_SWAP - Success
+-- Performing Test HPX_WITH_CXX20_TRIVIAL_VIRTUAL_DESTRUCTOR - Failed
+-- Performing Test HPX_WITH_CXX20_STD_CONSTRUCT_AT - Failed
+-- Performing Test HPX_WITH_CXX_LAMBDA_CAPTURE_DECLTYPE - Success
+-- Performing Test HPX_WITH_BUILTIN_INTEGER_PACK - Success
+-- Performing Test HPX_WITH_BUILTIN_MAKE_INTEGER_SEQ - Failed
+-- Performing Test HPX_WITH_BUILTIN_TYPE_PACK_ELEMENT - Failed
+-- Performing Test HPX_WITH_BUILTIN_FORWARD_MOVE - Failed
+-- Performing Test HPX_WITH_MM_PREFETCH - Success
+-- Performing Test HPX_WITH_STABLE_INPLACE_MERGE - Success
+-- Using datapar backend: STD_EXPERIMENTAL_SIMD
+-- Performing Test HPX_WITH_UNISTD_H - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WALL
+-- Performing Test HPX_WITH_CXX_FLAG_WALL - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WEXTRA
+-- Performing Test HPX_WITH_CXX_FLAG_WEXTRA - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WPEDANTIC
+-- Performing Test HPX_WITH_CXX_FLAG_WPEDANTIC - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_STRICT_ALIASING
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_STRICT_ALIASING - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_SIGN_PROMO
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_SIGN_PROMO - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_ATTRIBUTES
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_ATTRIBUTES - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_CAST_ALIGN
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_CAST_ALIGN - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_INTERFERENCE_SIZE
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_INTERFERENCE_SIZE - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_NOEXCEPT_TYPE
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_NOEXCEPT_TYPE - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WFORMAT_2
+-- Performing Test HPX_WITH_CXX_FLAG_WFORMAT_2 - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_FORMAT_NONLITERAL
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_FORMAT_NONLITERAL - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WINIT_SELF
+-- Performing Test HPX_WITH_CXX_FLAG_WINIT_SELF - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WDOUBLE_PROMOTION
+-- Performing Test HPX_WITH_CXX_FLAG_WDOUBLE_PROMOTION - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WCAST_QUAL
+-- Performing Test HPX_WITH_CXX_FLAG_WCAST_QUAL - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WCAST_ALIGN
+-- Performing Test HPX_WITH_CXX_FLAG_WCAST_ALIGN - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_TRAMPOLINES
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_TRAMPOLINES - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_PARENTHESES
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_PARENTHESES - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_REORDER
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_REORDER - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_RETURN_TYPE
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_RETURN_TYPE - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_SEQUENCE_POINT
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_SEQUENCE_POINT - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_UNINITIALIZED
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_UNINITIALIZED - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_FORMAT
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_FORMAT - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_MISSING_BRACES
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_MISSING_BRACES - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_SIGN_COMPARE
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_SIGN_COMPARE - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR - Success
+-- Performing Test HPX_WITH_CXX_FLAG_FDIAGNOSTICS_SHOW_OPTION
+-- Performing Test HPX_WITH_CXX_FLAG_FDIAGNOSTICS_SHOW_OPTION - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_VLA
+-- Performing Test HPX_WITH_CXX_FLAG_WERROR_VLA - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_BUT_SET_PARAMETER
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_BUT_SET_PARAMETER - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_BUT_SET_VARIABLE
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_BUT_SET_VARIABLE - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_LOCAL_TYPEDEFS
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_UNUSED_LOCAL_TYPEDEFS - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_MAYBE_UNINITIALIZED
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_MAYBE_UNINITIALIZED - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_SYNC_NAND
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_SYNC_NAND - Success
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_DELETE_NON_VIRTUAL_DTOR
+-- Performing Test HPX_WITH_CXX_FLAG_WNO_DELETE_NON_VIRTUAL_DTOR - Success
+-- Performing Test WITH_LINKER_FLAG_WL__Z_DEFS
+-- Performing Test WITH_LINKER_FLAG_WL__Z_DEFS - Success
+-- Performing Test HPX_WITH_CXX_FLAG_FVISIBILITY_HIDDEN
+-- Performing Test HPX_WITH_CXX_FLAG_FVISIBILITY_HIDDEN - Success
+-- Performing Test WITH_LINKER_FLAG_FVISIBILITY_HIDDEN
+-- Performing Test WITH_LINKER_FLAG_FVISIBILITY_HIDDEN - Success
+-- Performing Test HPX_WITH_RDTSC - Success
+-- Performing Test HPX_WITH_RDTSCP - Success
+-- Architecture detected: x86_64
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Performing Test HPX_WITH_CXX_FLAG_PTHREAD
+-- Performing Test HPX_WITH_CXX_FLAG_PTHREAD - Success
+-- Performing Test WITH_LINKER_FLAG_PTHREAD
+-- Performing Test WITH_LINKER_FLAG_PTHREAD - Success
+-- Found Boost: /opt/apps/gcc12/boost/1.80.0/debug (found suitable version "1.80.0", minimum required is "1.71")  
+-- HPX_WITH_FETCH_ASIO=ON, Asio will be fetched using CMake's FetchContent and installed alongside HPX (HPX_WITH_ASIO_TAG=asio-1-21-0)
+-- WARNING: HPX will perform poorly without tcmalloc, jemalloc, or mimalloc. See docs for more info.
+-- Using system allocator.
+-- Found Hwloc: /opt/apps/hwloc/2.7.1/lib/libhwloc.so  
+-- MPI version:  3.1
+-- HPX_WITH_FETCH_LCI=ON, LCI will be fetched using CMake's FetchContent and installed alongside HPX (HPX_WITH_LCI_TAG=v1.7.2)
+-- The C compiler identification is GNU 12.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/apps/gcc/12.2.0/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.4.2") 
+-- Found IBV: /usr/include (found version "1.14.41.0") 
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE - Success
+-- Found MPI_C: /opt/apps/openmpi/4.1.4/lib/libmpi.so (found version "3.1") 
+-- Found MPI: TRUE (found version "3.1") found components: C 
+-- Looking for struct sigevent._sigev_un._tid
+-- Looking for struct sigevent._sigev_un._tid - found
+-- Looking for struct sigevent.sigev_notify_thread_id
+-- Looking for struct sigevent.sigev_notify_thread_id - not found
+-- Looking for include file malloc.h
+-- Looking for include file malloc.h - found
+-- Looking for include file malloc_np.h
+-- Looking for include file malloc_np.h - not found
+-- Performing Test CHECK_MALLOC_HOOK_RET_VAL
+-- Performing Test CHECK_MALLOC_HOOK_RET_VAL - Success
+-- Looking for clearenv
+-- Looking for clearenv - found
+-- Looking for malloc_trim
+-- Looking for malloc_trim - found
+-- Looking for memalign
+-- Looking for memalign - found
+-- Looking for posix_memalign
+-- Looking for posix_memalign - found
+-- Looking for mremap
+-- Looking for mremap - found
+-- Looking for sched_setaffinity
+-- Looking for sched_setaffinity - found
+-- Looking for sched_getaffinity
+-- Looking for sched_getaffinity - found
+-- Looking for cpuset_setaffinity
+-- Looking for cpuset_setaffinity - not found
+-- Looking for cpuset_getaffinity
+-- Looking for cpuset_getaffinity - not found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of sighandler_t
+-- Check size of sighandler_t - done
+-- Check size of __sighandler_t
+-- Check size of __sighandler_t - done
+-- Performing Test CHECK_ATTR_RET_VAL
+-- Performing Test CHECK_ATTR_RET_VAL - Success
+-- high-resolution hardware timer enabled
+-- Looking for __clear_cache
+-- Looking for __clear_cache - found
+-- Looking for __aarch64_sync_cache_range
+-- Looking for __aarch64_sync_cache_range - not found
+-- Looking for MADV_FREE
+-- Looking for MADV_FREE - found
+-- Looking for MADV_REMOVE
+-- Looking for MADV_REMOVE - found
+-- Looking for POSIX_MADV_DONTNEED
+-- Looking for POSIX_MADV_DONTNEED - found
+-- Looking for getauxval
+-- Looking for getauxval - found
+-- Looking for SYS_mmap
+-- Looking for SYS_mmap - found
+-- Looking for SYS_munmap
+-- Looking for SYS_munmap - found
+-- Looking for SYS_mremap
+-- Looking for SYS_mremap - found
+-- Looking for SYS_brk
+-- Looking for SYS_brk - found
+-- Looking for SYS_madvise
+-- Looking for SYS_madvise - found
+-- Looking for SYS_shmat
+-- Looking for SYS_shmat - found
+-- Looking for SYS_shmdt
+-- Looking for SYS_shmdt - found
+-- Looking for SYS_ipc
+-- Looking for SYS_ipc - not found
+-- Found Git: /usr/bin/git (found version "2.31.1") 
+-- WARNING: GIT commit not found (set to 'unknown').
+-- 
+-- Configuring modules:
+-- 
+--   Configuring libhpx_core modules:
+-- 
+--     Module configuration (coroutines):
+--     HPX_COROUTINES_WITH_SWAP_CONTEXT_EMULATION=OFF
+-- 
+--     Module configuration (datastructures):
+--     HPX_DATASTRUCTURES_WITH_ADAPT_STD_TUPLE=ON
+--     HPX_DATASTRUCTURES_WITH_ADAPT_STD_VARIANT=OFF
+-- 
+--     Module configuration (serialization):
+--     HPX_SERIALIZATION_WITH_ALLOW_CONST_TUPLE_MEMBERS=OFF
+--     HPX_SERIALIZATION_WITH_ALLOW_RAW_POINTER_SERIALIZATION=OFF
+--     HPX_SERIALIZATION_WITH_ALL_TYPES_ARE_BITWISE_SERIALIZABLE=OFF
+--     HPX_SERIALIZATION_WITH_BOOST_TYPES=OFF
+--     HPX_SERIALIZATION_WITH_SUPPORTS_ENDIANESS=OFF
+-- 
+--     Module configuration (topology):
+--     HPX_TOPOLOGY_WITH_ADDITIONAL_HWLOC_TESTING=OFF
+-- 
+--   Configuring libhpx modules:
+-- Configuring components:
+--   component_storage
+--   containers
+--   iostreams
+--   parcel_plugins
+--   performance_counters
+--   process
+-- Found PythonInterp: /usr/bin/python3.9 (found version "3.9.13") 
+-- 
+-- Configuration summary:
+--
+--     HPX_WITH_AGAS_DUMP_REFCNT_ENTRIES=OFF
+--     HPX_WITH_APEX=OFF
+--     HPX_WITH_ASIO_TAG=asio-1-21-0
+--     HPX_WITH_ASYNC_MPI=ON
+--     HPX_WITH_ATTACH_DEBUGGER_ON_TEST_FAILURE=OFF
+--     HPX_WITH_AUTOMATIC_SERIALIZATION_REGISTRATION=ON
+--     HPX_WITH_BENCHMARK_SCRIPTS_PATH=/home/jiakun/workspace/hpx-scripts/rostam/ctest/build/gcc-12-debug/build/gcc-12-debug/scripts
+--     HPX_WITH_BUILD_BINARY_PACKAGE=OFF
+--     HPX_WITH_CHECK_MODULE_DEPENDENCIES=ON
+--     HPX_WITH_COMPILER_WARNINGS=ON
+--     HPX_WITH_COMPILER_WARNINGS_AS_ERRORS=ON
+--     HPX_WITH_COMPILE_ONLY_TESTS=ON
+--     HPX_WITH_COMPRESSION_BZIP2=OFF
+--     HPX_WITH_COMPRESSION_SNAPPY=OFF
+--     HPX_WITH_COMPRESSION_ZLIB=OFF
+--     HPX_WITH_COROUTINE_COUNTERS=OFF
+--     HPX_WITH_CUDA=OFF
+--     HPX_WITH_CXX_STANDARD=20
+--     HPX_WITH_DATAPAR=ON
+--     HPX_WITH_DATAPAR_BACKEND=STD_EXPERIMENTAL_SIMD
+--     HPX_WITH_DEPRECATION_WARNINGS=ON
+--     HPX_WITH_DISABLED_SIGNAL_EXCEPTION_HANDLERS=OFF
+--     HPX_WITH_DISTRIBUTED_RUNTIME=ON
+--     HPX_WITH_DOCUMENTATION=OFF
+--     HPX_WITH_DYNAMIC_HPX_MAIN=ON
+--     HPX_WITH_EXAMPLES=ON
+--     HPX_WITH_EXAMPLES_HDF5=OFF
+--     HPX_WITH_EXAMPLES_OPENMP=OFF
+--     HPX_WITH_EXAMPLES_QT4=OFF
+--     HPX_WITH_EXAMPLES_QTHREADS=OFF
+--     HPX_WITH_EXAMPLES_TBB=OFF
+--     HPX_WITH_EXECUTABLE_PREFIX=
+--     HPX_WITH_FAIL_COMPILE_TESTS=ON
+--     HPX_WITH_FAULT_TOLERANCE=OFF
+--     HPX_WITH_FETCH_ASIO=ON
+--     HPX_WITH_FETCH_LCI=ON
+--     HPX_WITH_FULL_RPATH=ON
+--     HPX_WITH_GCC_VERSION_CHECK=ON
+--     HPX_WITH_GENERIC_CONTEXT_COROUTINES=OFF
+--     HPX_WITH_HIDDEN_VISIBILITY=ON
+--     HPX_WITH_HIP=OFF
+--     HPX_WITH_IO_COUNTERS=ON
+--     HPX_WITH_IO_POOL=ON
+--     HPX_WITH_ITTNOTIFY=OFF
+--     HPX_WITH_LCI_TAG=v1.7.2
+--     HPX_WITH_LOGGING=ON
+--     HPX_WITH_MALLOC=system
+--     HPX_WITH_MAX_CPU_COUNT=
+--     HPX_WITH_MAX_NUMA_DOMAIN_COUNT=8
+--     HPX_WITH_MODULES_AS_STATIC_LIBRARIES=ON
+--     HPX_WITH_NETWORKING=ON
+--     HPX_WITH_NICE_THREADLEVEL=OFF
+--     HPX_WITH_PAPI=OFF
+--     HPX_WITH_PARALLEL_TESTS_BIND_NONE=ON
+--     HPX_WITH_PARCELPORT_ACTION_COUNTERS=OFF
+--     HPX_WITH_PARCELPORT_COUNTERS=OFF
+--     HPX_WITH_PARCELPORT_LCI=ON
+--     HPX_WITH_PARCELPORT_LCI_ENV=MV2_COMM_WORLD_RANK PMI_RANK OMPI_COMM_WORLD_SIZE ALPS_APP_PE PMIX_RANK PALS_NODEID
+--     HPX_WITH_PARCELPORT_LIBFABRIC=OFF
+--     HPX_WITH_PARCELPORT_MPI=ON
+--     HPX_WITH_PARCELPORT_MPI_ENV=MV2_COMM_WORLD_RANK PMI_RANK OMPI_COMM_WORLD_SIZE ALPS_APP_PE PMIX_RANK PALS_NODEID
+--     HPX_WITH_PARCELPORT_MPI_MULTITHREADED=ON
+--     HPX_WITH_PARCELPORT_TCP=ON
+--     HPX_WITH_PARCEL_COALESCING=ON
+--     HPX_WITH_PARCEL_PROFILING=OFF
+--     HPX_WITH_PKGCONFIG=OFF
+--     HPX_WITH_PRECOMPILED_HEADERS=OFF
+--     HPX_WITH_RPM=OFF
+--     HPX_WITH_RUN_MAIN_EVERYWHERE=OFF
+--     HPX_WITH_SANITIZERS=OFF
+--     HPX_WITH_SCHEDULER_LOCAL_STORAGE=OFF
+--     HPX_WITH_SPINLOCK_DEADLOCK_DETECTION=OFF
+--     HPX_WITH_SPINLOCK_POOL_NUM=128
+--     HPX_WITH_STACKOVERFLOW_DETECTION=ON
+--     HPX_WITH_STACKTRACES=ON
+--     HPX_WITH_STACKTRACES_DEMANGLE_SYMBOLS=ON
+--     HPX_WITH_STACKTRACES_STATIC_SYMBOLS=OFF
+--     HPX_WITH_STATIC_LINKING=OFF
+--     HPX_WITH_TESTS=ON
+--     HPX_WITH_TESTS_BENCHMARKS=ON
+--     HPX_WITH_TESTS_DEBUG_LOG=OFF
+--     HPX_WITH_TESTS_DEBUG_LOG_DESTINATION=cout
+--     HPX_WITH_TESTS_EXAMPLES=ON
+--     HPX_WITH_TESTS_EXTERNAL_BUILD=ON
+--     HPX_WITH_TESTS_HEADERS=OFF
+--     HPX_WITH_TESTS_MAX_THREADS_PER_LOCALITY=0
+--     HPX_WITH_TESTS_REGRESSIONS=ON
+--     HPX_WITH_TESTS_UNIT=ON
+--     HPX_WITH_THREAD_BACKTRACE_DEPTH=20
+--     HPX_WITH_THREAD_BACKTRACE_ON_SUSPENSION=OFF
+--     HPX_WITH_THREAD_CREATION_AND_CLEANUP_RATES=OFF
+--     HPX_WITH_THREAD_CUMULATIVE_COUNTS=ON
+--     HPX_WITH_THREAD_DEBUG_INFO=OFF
+--     HPX_WITH_THREAD_DESCRIPTION_FULL=OFF
+--     HPX_WITH_THREAD_GUARD_PAGE=ON
+--     HPX_WITH_THREAD_IDLE_RATES=OFF
+--     HPX_WITH_THREAD_LOCAL_STORAGE=OFF
+--     HPX_WITH_THREAD_MANAGER_IDLE_BACKOFF=ON
+--     HPX_WITH_THREAD_QUEUE_WAITTIME=OFF
+--     HPX_WITH_THREAD_STACK_MMAP=ON
+--     HPX_WITH_THREAD_STEALING_COUNTS=OFF
+--     HPX_WITH_THREAD_TARGET_ADDRESS=OFF
+--     HPX_WITH_TIMER_POOL=ON
+--     HPX_WITH_TOOLS=OFF
+--     HPX_WITH_TUPLE_RVALUE_SWAP=ON
+--     HPX_WITH_UNITY_BUILD=OFF
+--     HPX_WITH_VALGRIND=OFF
+--     HPX_WITH_VERIFY_LOCKS=OFF
+--     HPX_WITH_VERIFY_LOCKS_BACKTRACE=OFF
+--     HPX_WITH_VIM_YCM=OFF
+--     HPX_WITH_ZERO_COPY_SERIALIZATION_THRESHOLD=128
+
+HPX will be installed to /usr/local
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jiakun/workspace/hpx-scripts/rostam/ctest/build/gcc-12-debug/build/gcc-12-debug
+</Log>
+		<ConfigureStatus>0</ConfigureStatus>
+		<EndDateTime>Jan 23 17:32 CST</EndDateTime>
+		<EndConfigureTime>1674516777</EndConfigureTime>
+		<ElapsedMinutes>1</ElapsedMinutes>
+	</Configure>
+</Site>

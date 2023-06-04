@@ -1,0 +1,19 @@
+--- Begin Cleanup ---
+--- End Cleanup ---
+"git" "rev-list" "-n" "1" "HEAD" "--"
+rl-err> fatal: not a git repository (or any parent up to mount point /home)
+rl-err> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+--- Begin Revisions ---
+"git" "rev-list" "--reverse" ".." "--" | "git" "diff-tree" "--stdin" "--always" "-z" "-r" "--pretty=raw" "--encoding=utf-8"
+dt-err> fatal: not a git repository (or any parent up to mount point /home)
+dt-err> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+dt-err> fatal: not a git repository (or any parent up to mount point /home)
+dt-err> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+dt-out> 
+"git" "update-index" "--refresh"
+ui-err> fatal: not a git repository (or any parent up to mount point /home)
+ui-err> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+"git" "diff-index" "-z" "HEAD" "--"
+di-err> fatal: not a git repository (or any parent up to mount point /home)
+di-err> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+--- End Revisions ---

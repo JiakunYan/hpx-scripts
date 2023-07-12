@@ -21,6 +21,8 @@ baseline = {
     "prepost_recv_num": 1,
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
+    "cq_type": "array_atomic_faa",
+    "reg_mem": 1
 }
 
 configs = [
@@ -60,4 +62,4 @@ if __name__ == "__main__":
     os.environ["CURRENT_SCRIPT_PATH"] = os.path.dirname(os.path.realpath(__file__))
     for i in range(n):
         for config in configs:
-            run_slurm(tag, 2, config, time = "2:00")
+            run_slurm(tag, 2, config, time = "10:00")

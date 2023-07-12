@@ -8,7 +8,7 @@ import os,sys
 sys.path.append("../../include")
 from draw_simple import *
 
-name = "20230602-all"
+name = "20230712-paper"
 input_path = "run/slurm_output.*"
 output_path = "data/"
 line_patterns = [

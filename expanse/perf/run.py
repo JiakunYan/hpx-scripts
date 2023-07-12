@@ -21,13 +21,14 @@ baseline = {
     "prepost_recv_num": 1,
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
-    "cq_type": "array_atomic_faa",
-    "reg_mem": 1
 }
 
 configs = [
     baseline,
 ]
+
+# set path
+current_path = get_current_script_path()
 
 if __name__ == "__main__":
     n = 1

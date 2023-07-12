@@ -18,6 +18,9 @@ def get_default_config():
         "backlog_queue": 0,
         "prepost_recv_num": 1,
         "zero_copy_recv": 1,
+        "match_table_type": "hashqueue",
+        "cq_type": "array_atomic_faa",
+        "reg_mem": 1
     }
     return default_config
 
@@ -55,6 +58,10 @@ def get_environ_setting(config):
     }
     if "match_table_type" in config:
         ret["LCI_MT_BACKEND"] = config["match_table_type"]
+    if "cq_type" in config:
+        ret["LCI_CQ_TYPE"] = config["cq_type"]
+    if "reg_mem" in config and config["reg_mem"] or config["progress_type"] == "worker":
+        ret["LCI_USE_DREG"] = "0"
     return ret
 
 
@@ -93,7 +100,8 @@ def get_hpx_cmd(executable, config):
 --hpx:ini=hpx.parcel.{config["parcelport"]}.sendimm={config["sendimm"]} \
 --hpx:ini=hpx.parcel.lci.backlog_queue={config["backlog_queue"]} \
 --hpx:ini=hpx.parcel.lci.prepost_recv_num={config["prepost_recv_num"]} \
---hpx:ini=hpx.parcel.zero_copy_receive_optimization={config["zero_copy_recv"]}'''
+--hpx:ini=hpx.parcel.zero_copy_receive_optimization={config["zero_copy_recv"]} \
+--hpx:ini=hpx.parcel.lci.reg_mem={config["reg_mem"]}'''
     return cmd
 
 

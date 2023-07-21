@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pandas as pd
 import os,sys, json
 from matplotlib import pyplot as plt
@@ -9,8 +11,8 @@ from draw_simple import *
 import numpy as np
 import math
 
-job_tag = "paper"
-job_name = "20230712-" + job_tag
+job_tag = "final"
+job_name = "paw-atm23-" + job_tag
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
@@ -154,8 +156,7 @@ def batch(df):
             .replace("_sync", "_sy") \
             .replace("_rp", "_pin") \
             .replace("_worker", "_mt")
-    # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "default"), "default-numa", df["tag"])
-    # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "numalocal"), "default", df["tag"])
+
     df["inject_rate(K/s)"] = df["inject_rate(K/s)"].apply(int)
     draw_all = False
     # message rate
@@ -229,14 +230,6 @@ def batch(df):
     plot(df3, "window", "latency(us)", "name", "Latency w/ Window (16KiB)",
          filename="window-latency-16384", with_error=True, label_fn=label_fn,
          x_label="Window Size", y_label="Latency (us)")
-
-    # df3_tmp = df[df.apply(lambda row:
-    #                       row["nbytes"] == 65536 and
-    #                       row["nsteps"] > 1 and
-    #                       ("sendimm" in row["name"] or "mpi" in row["name"]),
-    #                       axis=1)]
-    # df3 = df3_tmp.copy()
-    # plot(df3, "window", "latency(us)", "name", "window-latency-65536", with_error=True)
 
 if __name__ == "__main__":
     df = pd.read_csv(os.path.join(input_path, job_name + ".csv"))

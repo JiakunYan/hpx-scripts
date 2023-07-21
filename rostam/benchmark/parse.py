@@ -5,8 +5,6 @@ import numpy as np
 import ast
 import pandas as pd
 import os,sys
-sys.path.append("../../include")
-from draw_simple import *
 
 name = "20230712-paper"
 input_path = "run/slurm_output.*"

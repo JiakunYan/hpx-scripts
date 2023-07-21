@@ -9,6 +9,7 @@ import math
 job_tag = "paper"
 job_name = "20230712-" + job_tag
 input_path = "data/"
+output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
 def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_error=True):
@@ -44,7 +45,9 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
 
     if filename is None:
         filename = title
-    dirname = os.path.join("draw", job_name)
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    dirname = os.path.join(output_path, job_name)
     if not os.path.exists(dirname):
         os.mkdir(dirname)
     output_png_name = os.path.join(dirname, "{}.png".format(filename))
@@ -118,7 +121,9 @@ def draw_bar(df, x_key, y_keys, title, x_include=None, color_map=None, filename=
 
     if filename is None:
         filename = title
-    dirname = os.path.join("draw", job_name)
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    dirname = os.path.join(output_path, job_name)
     if not os.path.exists(dirname):
         os.mkdir(dirname)
     output_png_name = os.path.join(dirname, "{}.png".format(filename))

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 import re
 import glob
@@ -6,7 +8,7 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230712-paper"
+name = "paw-atm23-final"
 input_path = "run/slurm_output.*"
 output_path = "data/"
 line_patterns = [
@@ -116,53 +118,6 @@ if __name__ == "__main__":
         "lci_putsendrecv_sync_rp_sendimm",
         "lci_putsendrecv_queue_worker_sendimm",
         "lci_putsendrecv_queue_rp_sendimm",
-        # # pthread
-        # "lci_sendrecv_sync_pthread",
-        # "lci_sendrecv_queue_pthread",
-        # "lci_sendrecv_sync_pthread_sendimm",
-        # "lci_sendrecv_queue_pthread_sendimm",
-        # "lci_putsendrecv_sync_pthread",
-        # "lci_putsendrecv_sync_pthread_sendimm",
-        # "lci_putsendrecv_queue_pthread",
-        # "lci_putsendrecv_queue_pthread_sendimm",
-        # # putva
-        # "lci_putva_sync_worker",
-        # "lci_putva_sync_worker_sendimm",
-        # "lci_putva_queue_worker_sendimm",
-        # "lci_putva_queue_rp_sendimm",
-        # # backlog queue
-        # "lci_sendrecv_sync_worker_bq",
-        # "lci_sendrecv_sync_worker_sendimm_bq",
-        # "lci_putsendrecv_queue_rp_sendimm_bq",
-        # # 2 devices
-        # "lci_putva_queue_worker_sendimm_2dev",
-        # "lci_putva_queue_rp_sendimm_2dev",
-        # # prepost receives
-        # "lci_sendrecv_sync_worker_post8",
-        # "lci_sendrecv_queue_worker_post8",
-        # "lci_sendrecv_sync_worker_sendimm_post8",
-        # "lci_sendrecv_queue_worker_sendimm_post8",
-        # # No zero-copy receives
-        # "mpi_nozcr",
-        # "lci_putsendrecv_queue_rp_sendimm_nozcr",
-        # # Match table
-        # "lci_sendrecv_sync_worker_sendimm_hash",
-        # "lci_putsendrecv_queue_worker_sendimm_hash",
-        # "lci_sendrecv_sync_worker_sendimm_mqueue",
-        # "lci_putsendrecv_queue_worker_sendimm_mqueue",
-        # "lci_sendrecv_sync_rp_sendimm_hash",
-        # "lci_putsendrecv_queue_rp_sendimm_hash",
-        # "lci_sendrecv_sync_rp_sendimm_mqueue",
-        # "lci_putsendrecv_queue_rp_sendimm_mqueue",
-        # # Others
-        # "lci_putva_sync_pthread",
-        # "lci_putva_sync_rp",
-        # "lci_putva_sync_pthread_sendimm",
-        # "lci_putva_sync_rp_sendimm",
-        # "lci_putva_queue_worker",
-        # "lci_putva_queue_pthread",
-        # "lci_putva_queue_rp",
-        # "lci_putva_queue_pthread_sendimm",
     ]
     df["name"] = pd.Categorical(df["name"], name_ordering)
     df = df.sort_values(by=["name", "inject_rate(K/s)"])

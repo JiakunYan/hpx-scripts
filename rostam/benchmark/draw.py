@@ -1,9 +1,6 @@
 import pandas as pd
 import os,sys, json
 from matplotlib import pyplot as plt
-import matplotlib.cm as mplcm
-import matplotlib.colors as colors
-from itertools import chain
 sys.path.append("../../include")
 from draw_simple import *
 import numpy as np
@@ -14,13 +11,9 @@ job_name = "20230712-" + job_tag
 input_path = "data/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
-def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_error=True, x_label=None, y_label=None):
+def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_error=True):
     if title is None:
         title = filename
-    if x_label is None:
-        x_label = x_key
-    if y_label is None:
-        y_label = y_key
 
     df = df.sort_values(by=[tag_key, x_key])
 
@@ -32,10 +25,6 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
         for line in lines:
             line["label"] = label_fn(line["label"])
 
-    # Setup colors
-    cmap_tab20=plt.get_cmap('tab20')
-    ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
-
     # time
     for line in lines:
         if with_error:
@@ -43,8 +32,8 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
             ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker='.', markerfacecolor='white', capsize=3)
         else:
             ax.plot(line["x"], line["y"], label=line["label"], marker='.', markerfacecolor='white')
-    ax.set_xlabel(x_label)
-    ax.set_ylabel(y_label)
+    ax.set_xlabel(x_key)
+    ax.set_ylabel(y_key)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
@@ -140,15 +129,6 @@ def draw_bar(df, x_key, y_keys, title, x_include=None, color_map=None, filename=
         json.dump({"xs": xs, "ys": ys_dict}, outfile)
 
 def batch(df):
-    def label_fn(label):
-        return label\
-            .replace("_putsendrecv", "_psr") \
-            .replace("_sendrecv", "_sr") \
-            .replace("_sendimm", "_i") \
-            .replace("_queue", "_cq") \
-            .replace("_sync", "_sy") \
-            .replace("_rp", "_pin") \
-            .replace("_worker", "_mt")
     # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "default"), "default-numa", df["tag"])
     # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "numalocal"), "default", df["tag"])
     df["inject_rate(K/s)"] = df["inject_rate(K/s)"].apply(int)
@@ -158,77 +138,67 @@ def batch(df):
                           row["nbytes"] == 8 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
+                           "_i" in row["name"]
                            or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           or row["name"] == "lci_psr_cq_pin"),
                           # row["input_inject_rate(K/s)"] != 0,
                           axis=1)]
     df1 = df1_tmp.copy()
-    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
-         filename="message_rate-8", with_error=True, label_fn=label_fn,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
-    draw_bar(df1, "name", "msg_rate(K/s)", "Maximum Message Rate (8B)", filename="message_rate-8-bar", label_fn=label_fn)
+    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-8", with_error=True)
+    draw_bar(df1, "name", "msg_rate(K/s)", "message_rate-8-bar")
 
     df2_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
+                           "_i" in row["name"]
                            or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           or row["name"] == "lci_psr_cq_pin"),
                           # row["input_inject_rate(K/s)"] != 0,
                           axis=1)]
     df2 = df2_tmp.copy()
-    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
-         filename="message_rate-16384", with_error=True, label_fn=label_fn,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
-    draw_bar(df2, "name", "msg_rate(K/s)", "Maximum Message Rate (16KiB)", filename="message_rate-16384-bar", label_fn=label_fn)
+    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-16384", with_error=True)
+    draw_bar(df2, "name", "msg_rate(K/s)", "message_rate-16384-bar")
 
     # latency
     df3_tmp = df[df.apply(lambda row:
                           row["window"] == 1 and
                           row["nsteps"] > 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
+                           "_i" in row["name"]
                            or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           or row["name"] == "lci_psr_cq_pin"),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "nbytes", "latency(us)", "name", "Latency w/ Message Size",
-         filename="latency", with_error=True, label_fn=label_fn,
-         x_label="Message Size (byte)", y_label="Latency (us)")
+    plot(df3, "nbytes", "latency(us)", "name", "latency", with_error=True)
 
     # window - latency
     df3_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 8 and
                           row["nsteps"] > 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
+                           "_i" in row["name"]
                            or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           or row["name"] == "lci_psr_cq_pin"),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (8B)",
-         filename="window-latency-8", with_error=True, label_fn=label_fn,
-         x_label="Window Size", y_label="Latency (us)")
+    plot(df3, "window", "latency(us)", "name", "window-latency-8", with_error=True)
 
     df3_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
                           row["nsteps"] > 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
+                           "_i" in row["name"]
                            or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           or row["name"] == "lci_psr_cq_pin"),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (16KiB)",
-         filename="window-latency-16384", with_error=True, label_fn=label_fn,
-         x_label="Window Size", y_label="Latency (us)")
+    plot(df3, "window", "latency(us)", "name", "window-latency-16384", with_error=True)
 
     # df3_tmp = df[df.apply(lambda row:
     #                       row["nbytes"] == 65536 and
     #                       row["nsteps"] > 1 and
-    #                       ("sendimm" in row["name"] or "mpi" in row["name"]),
+    #                       ("_i" in row["name"] or "mpi" in row["name"]),
     #                       axis=1)]
     # df3 = df3_tmp.copy()
     # plot(df3, "window", "latency(us)", "name", "window-latency-65536", with_error=True)

@@ -1,8 +1,11 @@
-def get_platform_config():
+def get_platform_config_all():
     return {
         "name": "expanse",
         "core_num": 128,
-        "best numa policy": "interleave",
+        "numa_policy": "interleave",
+        "account": "uic193",
+        "partition": "compute",
+        "octotiger_major": "local"
     }
 
 def get_srun_pmi_option(config):

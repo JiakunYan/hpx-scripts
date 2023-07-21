@@ -40,11 +40,11 @@ def get_theta(config):
 
 
 def get_nthreads(config):
-    platform_config = get_platform_config()
+    core_num = get_platform_config("core_num", required=True)
     if config["parcelport"] == "lci" and "pthread" in config["progress_type"]:
-        nthreads = platform_config["core_num"] - 1
+        nthreads = core_num - 1
     else:
-        nthreads = platform_config["core_num"]
+        nthreads = core_num
     return nthreads
 
 
@@ -107,9 +107,13 @@ def get_hpx_cmd(executable, config):
 
 def run_hpx(executable, config, extra_arguments="", timeout=None):
     os.environ.update(get_environ_setting(config))
+    platform_config = get_platform_config_all()
+    numactl_cmd = ""
+    if platform_config["numa_policy"] == "interleave":
+        numactl_cmd = "numactl --interleave=all"
 
     cmd = f'''
-srun {get_srun_pmi_option(config)} numactl --interleave=all {get_hpx_cmd(executable, config)} {extra_arguments}
+srun {get_srun_pmi_option(config)} {numactl_cmd} {get_hpx_cmd(executable, config)} {extra_arguments}
 '''
     print(cmd)
     sys.stdout.flush()

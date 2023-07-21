@@ -27,16 +27,16 @@ baseline = {
 
 configs = [
     {**baseline, "name": "mpi", "parcelport": "mpi", "sendimm": 0},
-    {**baseline, "name": "lci_sendrecv_sync_worker", "protocol": "sendrecv", "comp_type": "sync",
-     "progress_type": "worker", "sendimm": 0},
-    {**baseline, "name": "lci_sendrecv_sync_rp", "protocol": "sendrecv", "comp_type": "sync", "sendimm": 0},
-    {**baseline, "name": "lci_sendrecv_queue_worker", "protocol": "sendrecv", "progress_type": "worker", "sendimm": 0},
-    {**baseline, "name": "lci_sendrecv_queue_rp", "protocol": "sendrecv", "sendimm": 0},
-    {**baseline, "name": "lci_putsendrecv_sync_worker", "protocol": "putsendrecv", "comp_type": "sync",
-     "progress_type": "worker", "sendimm": 0},
-    {**baseline, "name": "lci_putsendrecv_sync_rp", "protocol": "putsendrecv", "comp_type": "sync", "sendimm": 0},
-    {**baseline, "name": "lci_putsendrecv_queue_worker", "protocol": "putsendrecv", "progress_type": "worker",
-     "sendimm": 0},
+    # {**baseline, "name": "lci_sendrecv_sync_worker", "protocol": "sendrecv", "comp_type": "sync",
+    #  "progress_type": "worker", "sendimm": 0},
+    # {**baseline, "name": "lci_sendrecv_sync_rp", "protocol": "sendrecv", "comp_type": "sync", "sendimm": 0},
+    # {**baseline, "name": "lci_sendrecv_queue_worker", "protocol": "sendrecv", "progress_type": "worker", "sendimm": 0},
+    # {**baseline, "name": "lci_sendrecv_queue_rp", "protocol": "sendrecv", "sendimm": 0},
+    # {**baseline, "name": "lci_putsendrecv_sync_worker", "protocol": "putsendrecv", "comp_type": "sync",
+    #  "progress_type": "worker", "sendimm": 0},
+    # {**baseline, "name": "lci_putsendrecv_sync_rp", "protocol": "putsendrecv", "comp_type": "sync", "sendimm": 0},
+    # {**baseline, "name": "lci_putsendrecv_queue_worker", "protocol": "putsendrecv", "progress_type": "worker",
+    #  "sendimm": 0},
     {**baseline, "name": "lci_putsendrecv_queue_rp", "protocol": "putsendrecv", "sendimm": 0},
     {**baseline, "name": "mpi_sendimm", "parcelport": "mpi"},
     {**baseline, "name": "lci_sendrecv_sync_worker_sendimm", "protocol": "sendrecv", "comp_type": "sync",
@@ -62,4 +62,4 @@ if __name__ == "__main__":
     os.environ["CURRENT_SCRIPT_PATH"] = os.path.dirname(os.path.realpath(__file__))
     for i in range(n):
         for config in configs:
-            run_slurm(tag, 2, config, time = "10:00")
+            run_slurm(tag, 2, config, time = "5:00")

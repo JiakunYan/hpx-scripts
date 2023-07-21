@@ -6,6 +6,9 @@ from matplotlib import pyplot as plt
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 from itertools import chain
+
+from matplotlib.ticker import FormatStrFormatter
+
 sys.path.append("../../include")
 from draw_simple import *
 import numpy as np
@@ -17,7 +20,9 @@ input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
-def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_error=True, x_label=None, y_label=None):
+def plot(df, x_key, y_key, tag_key, title,
+         filename = None, label_fn=None, with_error=True,
+         x_label=None, y_label=None, draw_y_max=False):
     if title is None:
         title = filename
     if x_label is None:
@@ -39,11 +44,23 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
     cmap_tab20=plt.get_cmap('tab20')
     ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
 
+    ratio = 0.0
+    for line in lines:
+        for y, error in zip(line["y"], line["error"]):
+            if error / y > ratio:
+                ratio = error / y
+    max_ratio = 0.6
+    if ratio > max_ratio:
+        errorbar_ratio = ratio / max_ratio
+        for line in lines:
+            line["error"] = [error / errorbar_ratio for error in line["error"]]
+        ax.text(0.025, 0.95, "Errorbar ratio: %.2f" % errorbar_ratio, transform=ax.transAxes)
     # time
     for line in lines:
         if with_error:
-            line["error"] = [0 if math.isnan(x) else x for x in line["error"]]
-            ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker='.', markerfacecolor='white', capsize=3)
+            ax.errorbar(line["x"], line["y"], line["error"],
+                        label=line["label"], marker='.',
+                        markerfacecolor='white', capsize=3)
         else:
             ax.plot(line["x"], line["y"], label=line["label"], marker='.', markerfacecolor='white')
     ax.set_xlabel(x_label)
@@ -54,6 +71,9 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
     # ax.legend(bbox_to_anchor = (1.05, 0.6))
     # ax.legend(bbox_to_anchor=(1.01, 1.01))
     ax.legend()
+    ax.tick_params(axis='y', which='both', labelsize="small")
+    ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
+    ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     plt.tight_layout()
 
     if filename is None:
@@ -69,82 +89,27 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
     with open(output_json_name, 'w') as outfile:
         json.dump({"Time": lines}, outfile)
 
-def draw_bar(df, x_key, y_keys, title, x_include=None, color_map=None, filename=None, label_fn=None):
-    if type(y_keys) != list:
-        y_keys = [y_keys]
+    if draw_y_max:
+        fig, ax = plt.subplots()
+        tags = []
+        y_maxs = []
+        for line in lines:
+            tags.append(line["label"])
+            y_maxs.append(max(line["y"]))
+        bar = ax.barh(tags, y_maxs, edgecolor="black")
+        for i, rect in enumerate(bar):
+            text = f'{y_maxs[i]:.2f}'
+            ax.text(y_maxs[i], rect.get_y() + rect.get_height() / 2.0,
+                    text, ha='left', va='center')
+        ax.set_title(title)
+        ax.invert_yaxis()  # labels read top-to-bottom
+        plt.tight_layout()
 
-    if x_include:
-        xs = list(x_include)
-    else:
-        xs = list(df[x_key].unique())
-
-    ys_dict = {}
-    # errors_dict = {}
-    colors_dict = {}
-    for y_key in y_keys:
-        ys = []
-        # errors = []
-        colors = []
-        for x in xs:
-            y = df[df[x_key] == x].max(numeric_only=True)[y_key]
-            # error = df[df[x_key] == x].std(numeric_only=True)[y_key]
-            if y is np.nan:
-                continue
-            if y == 0:
-                continue
-            ys.append(float(y))
-            # errors.append(float(error))
-            if color_map:
-                colors.append(color_map[x])
-        ys_dict[y_key] = ys
-        # errors_dict[y_key] = errors
-        colors_dict[y_key] = colors
-
-    # update labels
-    if label_fn is not None:
-        xs = list(map(label_fn, xs))
-
-    fig, ax = plt.subplots()
-    # fig, ax = plt.subplots(figsize=(10, len(xs) * 0.3 + 1))
-    bottom = np.zeros(len(xs))
-
-    bar = None
-    for y_key in y_keys:
-        if colors_dict[y_key]:
-            bar = ax.barh(xs, ys_dict[y_key], color=colors_dict[y_key], edgecolor="black", left=bottom)
-        else:
-            bar = ax.barh(xs, ys_dict[y_key], edgecolor="black", left=bottom)
-        bottom += ys_dict[y_key]
-
-    # Add actual number to the bar
-    for i, rect in enumerate(bar):
-        text = []
-        total = 0
-        for y_key in y_keys:
-            total += ys_dict[y_key][i]
-            text.append(f'{ys_dict[y_key][i]:.2f}')
-        if len(text) > 1:
-            text.append(f'{total:.2f}')
-        text = "/".join(text)
-        ax.text(bottom[i], rect.get_y() + rect.get_height() / 2.0,
-                text, ha='left', va='center')
-    ax.set_title(title)
-    ax.invert_yaxis()  # labels read top-to-bottom
-    plt.tight_layout()
-
-    if filename is None:
-        filename = title
-    if not os.path.exists(output_path):
-        os.mkdir(output_path)
-    dirname = os.path.join(output_path, job_name)
-    if not os.path.exists(dirname):
-        os.mkdir(dirname)
-    output_png_name = os.path.join(dirname, "{}.png".format(filename))
-    fig.savefig(output_png_name)
-    output_json_name = os.path.join(dirname, "{}.json".format(filename))
-    with open(output_json_name, 'w') as outfile:
-        # json.dump({"xs": xs, "ys": ys_dict, "errors": errors_dict}, outfile)
-        json.dump({"xs": xs, "ys": ys_dict}, outfile)
+        output_png_name = os.path.join(dirname, "{}-bar.png".format(filename))
+        fig.savefig(output_png_name)
+        output_json_name = os.path.join(dirname, "{}-bar.json".format(filename))
+        with open(output_json_name, 'w') as outfile:
+            json.dump({"tags": tags, "y_maxs": y_maxs}, outfile)
 
 def batch(df):
     def label_fn(label):
@@ -157,7 +122,14 @@ def batch(df):
             .replace("_rp", "_pin") \
             .replace("_worker", "_mt")
 
-    df["inject_rate(K/s)"] = df["inject_rate(K/s)"].apply(int)
+    def format_inject_rate(row):
+        ratio = row["input_inject_rate(1/s)"] / 1e3 / row["inject_rate(K/s)"]
+        if abs(1 - ratio) <= 0.05:
+            return row["input_inject_rate(1/s)"] / 1e3
+        else:
+            return row["inject_rate(K/s)"]
+
+    df["inject_rate(K/s)"] = df.apply(format_inject_rate, axis=1)
     draw_all = False
     # message rate
     df1_tmp = df[df.apply(lambda row:
@@ -172,8 +144,8 @@ def batch(df):
     df1 = df1_tmp.copy()
     plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
          filename="message_rate-8", with_error=True, label_fn=label_fn,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
-    draw_bar(df1, "name", "msg_rate(K/s)", "Maximum Message Rate (8B)", filename="message_rate-8-bar", label_fn=label_fn)
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
+         draw_y_max=True)
 
     df2_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
@@ -187,8 +159,8 @@ def batch(df):
     df2 = df2_tmp.copy()
     plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
          filename="message_rate-16384", with_error=True, label_fn=label_fn,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
-    draw_bar(df2, "name", "msg_rate(K/s)", "Maximum Message Rate (16KiB)", filename="message_rate-16384-bar", label_fn=label_fn)
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
+         draw_y_max=True)
 
     # latency
     df3_tmp = df[df.apply(lambda row:

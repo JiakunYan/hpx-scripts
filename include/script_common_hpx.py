@@ -4,12 +4,10 @@ import subprocess
 
 def get_default_config():
     default_config = {
-        "griddim": 8,
         "zc_threshold": 8192,
         "name": "lci",
         "task": "rs",
         "parcelport": "lci",
-        "max_level": 6,
         "protocol": "putva",
         "comp_type": "queue",
         "progress_type": "rp",
@@ -81,6 +79,7 @@ def load_module(config, build_type = "release", enable_pcounter = False, extra=N
     if lci_to_load == "lci/local-release":
         lci_to_load = "lci/local"
     module("load", "jemalloc")
+    module("load", "hwloc")
     module("load", lci_to_load)
     if extra:
         for t in extra:

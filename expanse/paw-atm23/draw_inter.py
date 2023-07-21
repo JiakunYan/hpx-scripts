@@ -15,8 +15,8 @@ from bokeh.models import CheckboxGroup, CustomJS
 from bokeh.palettes import Viridis3
 import itertools
 
-job_tag = "paper"
-job_name = "20230712-" + job_tag
+job_tag = "final"
+job_name = "paw-atm23-" + job_tag
 input_path = "data/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 

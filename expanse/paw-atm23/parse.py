@@ -22,7 +22,7 @@ line_patterns = [
 },
 {
     "format": ".*--inject-rate=(\d+).*",
-    "label": ["input_inject_rate(K/s)"]
+    "label": ["input_inject_rate(1/s)"]
 },
 {
     "format": "nbytes=(\S+)",

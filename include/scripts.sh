@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 function mkdir_s() {
   if [[ -d "$1" ]]; then
     read -p "$1 directory exists. Are you sure to remove it | continue with it | or abort? [r|c|A]" -n 1 -r
@@ -21,3 +23,35 @@ function record_env() {
     module list > init-module.log 2>&1
   fi
 }
+
+function summarize() {
+  # exit when any command fails
+  set -e
+
+  mkdir_s ./summary
+
+  if [[ -d "./run" ]]; then
+  #  find ./run -name 'slurm_output.*' -exec cp --parents \{\} ./summary \;
+    cp -r run ./summary
+  fi
+  if [[ -d "./data" ]]; then
+    cp -r data ./summary
+  fi
+  if [[ -d "./draw" ]]; then
+    cp -r draw ./summary
+  fi
+  if [[ -d "./draw" ]]; then
+    cp -r draw ./summary
+  fi
+  if compgen -G "*.sh" > /dev/null; then
+    cp *.sh ./summary
+  fi
+  if compgen -G "*.py" > /dev/null; then
+    cp *.py ./summary
+  fi
+
+  tar -czf summary.tar.gz summary
+  rm -rf summary
+}
+
+"$@"

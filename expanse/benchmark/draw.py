@@ -9,8 +9,8 @@ from draw_simple import *
 import numpy as np
 import math
 
-job_tag = "paper"
-job_name = "20230712-" + job_tag
+job_tag = "ucxmt"
+job_name = "20230726-" + job_tag
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]

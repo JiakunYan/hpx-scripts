@@ -6,7 +6,7 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230712-paper"
+name = "20230909-basic"
 input_path = "run/slurm_output.*"
 output_path = "data/"
 line_patterns = [
@@ -96,26 +96,38 @@ if __name__ == "__main__":
     # df = df.sort_values(by=all_labels)
     # Sort dataframe
     name_ordering = [
-        # baseline,
+        # new
         "lci",
         "mpi",
         "mpi_i",
-        "lci_sr_sy_mt",
-        "lci_sr_sy_pin",
-        "lci_sr_cq_mt",
-        "lci_sr_cq_pin",
-        "lci_psr_sy_mt",
-        "lci_psr_sy_pin",
-        "lci_psr_cq_mt",
-        "lci_psr_cq_pin",
-        "lci_sr_sy_mt_i",
-        "lci_sr_sy_pin_i",
-        "lci_sr_cq_mt_i",
-        "lci_sr_cq_pin_i",
-        "lci_psr_sy_mt_i",
-        "lci_psr_sy_pin_i",
-        "lci_psr_cq_mt_i",
-        "lci_psr_cq_pin_i",
+        "lci_wo_i",
+        "lci_sendrecv",
+        "lci_sync",
+        "lci_worker_d1",
+        "lci_worker_d4",
+        "lci_rp_d1",
+        "lci_rp_d2",
+        "lci_rp_d4",
+        # baseline,
+        # "lci",
+        # "mpi",
+        # "mpi_i",
+        # "lci_sr_sy_mt",
+        # "lci_sr_sy_pin",
+        # "lci_sr_cq_mt",
+        # "lci_sr_cq_pin",
+        # "lci_psr_sy_mt",
+        # "lci_psr_sy_pin",
+        # "lci_psr_cq_mt",
+        # "lci_psr_cq_pin",
+        # "lci_sr_sy_mt_i",
+        # "lci_sr_sy_pin_i",
+        # "lci_sr_cq_mt_i",
+        # "lci_sr_cq_pin_i",
+        # "lci_psr_sy_mt_i",
+        # "lci_psr_sy_pin_i",
+        # "lci_psr_cq_mt_i",
+        # "lci_psr_cq_pin_i",
         # # pthread
         # "lci_sr_sy_pthread",
         # "lci_sr_cq_pthread",

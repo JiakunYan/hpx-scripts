@@ -15,8 +15,8 @@ from bokeh.models import CheckboxGroup, CustomJS
 from bokeh.palettes import Viridis3
 import itertools
 
-job_tag = "ucxmt"
-job_name = "20230726-" + job_tag
+job_tag = "final"
+job_name = "paw-atm23-" + job_tag
 input_path = "data/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
@@ -70,6 +70,7 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_dict=None, wit
 
     df = df.sort_values(by=[tag_key, x_key])
 
+    fig, ax = plt.subplots(figsize=(15, 10))
     line_entries = parse_tag(df, x_key, y_key, tag_key)
     # update labels
     if label_dict is not None:

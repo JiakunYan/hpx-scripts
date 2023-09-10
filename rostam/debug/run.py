@@ -9,20 +9,21 @@ sys.path.append("../../include")
 from script_common import *
 
 baseline = {
-    "name": "lci_psr_cq_pin_i",
+    "name": "lci",
     "zc_threshold": 8192,
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "rp",
-    "prg_thread_num": 1,
+    "progress_type": "worker",
+    "prg_thread_num": "auto",
     "sendimm": 1,
     "backlog_queue": 0,
     "prepost_recv_num": 1,
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
-    "reg_mem": 0
+    "reg_mem": 0,
+    "ndevices": 2
 }
 
 configs = [

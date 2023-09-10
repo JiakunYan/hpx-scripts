@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -9,18 +9,21 @@ sys.path.append("../../include")
 from script_common import *
 
 baseline = {
-    "name": "mpi",
+    "name": "lci",
     "zc_threshold": 8192,
-    "parcelport": "mpi",
+    "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
     "progress_type": "rp",
-    "prg_thread_num": 1,
-    "sendimm": 0,
+    "prg_thread_num": "auto",
+    "sendimm": 1,
     "backlog_queue": 0,
     "prepost_recv_num": 1,
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
+    "cq_type": "array_atomic_faa",
+    "reg_mem": 0,
+    "ndevices": 2
 }
 
 configs = [

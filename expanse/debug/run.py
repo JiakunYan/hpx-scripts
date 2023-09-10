@@ -22,7 +22,8 @@ baseline = {
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
-    "reg_mem": 1
+    "reg_mem": 1,
+    "ndevices": 1
 }
 
 configs = [

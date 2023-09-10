@@ -13,12 +13,12 @@ import json
 # print("Config: " + json.dumps(config))
 
 baseline = {
-    "name": "lci_putsendrecv_queue_rp_sendimm",
+    "name": "lci",
     "zc_threshold": 8192,
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "rp",
+    "progress_type": "worker",
     "prg_thread_num": 1,
     "sendimm": 1,
     "backlog_queue": 0,
@@ -26,10 +26,12 @@ baseline = {
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
-    "reg_mem": 1
+    "reg_mem": 1,
+    "ndevices": 8
 }
 
 configs = [
+    baseline
     # {**baseline, "name": "mpi", "parcelport": "mpi", "sendimm": 0},
     # {**baseline, "name": "lci_sendrecv_sync_worker", "protocol": "sendrecv", "comp_type": "sync",
     #  "progress_type": "worker", "sendimm": 0},
@@ -47,7 +49,7 @@ configs = [
     #  "progress_type": "worker"},
     # {**baseline, "name": "lci_sendrecv_sync_rp_sendimm", "protocol": "sendrecv", "comp_type": "sync"},
     # {**baseline, "name": "lci_sendrecv_queue_worker_sendimm", "protocol": "sendrecv", "progress_type": "worker"},
-    {**baseline, "name": "lci_sendrecv_queue_rp_sendimm", "protocol": "sendrecv"},
+    # {**baseline, "name": "lci_sendrecv_queue_rp_sendimm", "protocol": "sendrecv"},
     # {**baseline, "name": "lci_putsendrecv_sync_worker_sendimm", "protocol": "putsendrecv", "comp_type": "sync",
     #  "progress_type": "worker"},
     # {**baseline, "name": "lci_putsendrecv_sync_rp_sendimm", "protocol": "putsendrecv", "comp_type": "sync"},
@@ -65,12 +67,12 @@ os.environ["UCX_WARN_UNUSED_ENV_VARS"] = "n"
 
 for config in configs:
     # load modules
-    load_module(config, build_type="release", enable_pcounter=True)
+    load_module(config, build_type="release", enable_pcounter=False)
     # module_list()
     print(config)
-    executable = os.path.realpath(os.path.join(os.environ["HOME"], "opt/hpx/local-release-pcounter/build/bin/pingpong_performance2"))
+    executable = os.path.realpath(os.path.join(os.environ["HOME"], "opt/hpx/local/build/bin/pingpong_performance2"))
 
-    os.environ["LCT_PCOUNTER_AUTO_DUMP"] = "run/pcounter.8b.{}.log.%".format(config["name"])
+    # os.environ["LCT_PCOUNTER_AUTO_DUMP"] = "run/pcounter.8b.{}.log.%".format(config["name"])
     run_hpx(executable, config, extra_arguments=f"--window=500000 --batch-size=100 --nbytes=8 --inject-rate=0")
     # os.environ["LCT_PCOUNTER_AUTO_DUMP"] = "run/pcounter.16kb.{}.log.%".format(config["name"])
     # run_hpx(executable, config, extra_arguments=f"--window=100000 --batch-size=10 --nbytes=16384 --inject-rate=0 ")

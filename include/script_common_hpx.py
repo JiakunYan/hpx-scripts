@@ -4,12 +4,10 @@ import subprocess
 
 def get_default_config():
     default_config = {
-        "griddim": 8,
         "zc_threshold": 8192,
         "name": "lci",
         "task": "rs",
         "parcelport": "lci",
-        "max_level": 6,
         "protocol": "putva",
         "comp_type": "queue",
         "progress_type": "rp",
@@ -20,7 +18,8 @@ def get_default_config():
         "zero_copy_recv": 1,
         "match_table_type": "hashqueue",
         "cq_type": "array_atomic_faa",
-        "reg_mem": 1
+        "reg_mem": 1,
+        "ndevices": 1,
     }
     return default_config
 
@@ -74,13 +73,12 @@ def load_module(config, build_type = "release", enable_pcounter = False, extra=N
     if enable_pcounter:
         lci_to_load += "-pcounter"
     # Thread-safe progress function
-    if config["parcelport"] == "lci" and \
-       ("worker" in config["progress_type"] or
-        config["progress_type"] == "rp" and config["prg_thread_num"] > 1):
+    if config["parcelport"] == "lci" and "worker" in config["progress_type"]:
         lci_to_load += "-safeprog"
     if lci_to_load == "lci/local-release":
         lci_to_load = "lci/local"
     module("load", "jemalloc")
+    module("load", "hwloc")
     module("load", lci_to_load)
     if extra:
         for t in extra:
@@ -88,20 +86,28 @@ def load_module(config, build_type = "release", enable_pcounter = False, extra=N
 
 
 def get_hpx_cmd(executable, config):
+    prg_thread_num = 1
+    if "prg_thread_num" in config:
+        if config["prg_thread_num"] == "auto":
+            prg_thread_num = config["ndevices"]
+        else:
+            prg_thread_num = config["prg_thread_num"]
     cmd = f'''{executable} \
 --hpx:ini=hpx.stacks.use_guard_pages=0 \
 --hpx:ini=hpx.parcel.{config["parcelport"]}.priority=1000 \
 --hpx:ini=hpx.parcel.{config["parcelport"]}.zero_copy_serialization_threshold={config["zc_threshold"]} \
 --hpx:threads={get_nthreads(config)} \
+--hpx:ini=hpx.agas.use_caching=0 \
 --hpx:ini=hpx.parcel.lci.protocol={config["protocol"]} \
 --hpx:ini=hpx.parcel.lci.comp_type={config["comp_type"]} \
 --hpx:ini=hpx.parcel.lci.progress_type={config["progress_type"]} \
---hpx:ini=hpx.parcel.lci.prg_thread_num={config["prg_thread_num"]} \
+--hpx:ini=hpx.parcel.lci.prg_thread_num={prg_thread_num} \
 --hpx:ini=hpx.parcel.{config["parcelport"]}.sendimm={config["sendimm"]} \
 --hpx:ini=hpx.parcel.lci.backlog_queue={config["backlog_queue"]} \
 --hpx:ini=hpx.parcel.lci.prepost_recv_num={config["prepost_recv_num"]} \
 --hpx:ini=hpx.parcel.zero_copy_receive_optimization={config["zero_copy_recv"]} \
---hpx:ini=hpx.parcel.lci.reg_mem={config["reg_mem"]}'''
+--hpx:ini=hpx.parcel.lci.reg_mem={config["reg_mem"]} \
+--hpx:ini=hpx.parcel.lci.ndevices={config["ndevices"]}'''
     return cmd
 
 

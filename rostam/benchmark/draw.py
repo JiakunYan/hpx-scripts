@@ -6,8 +6,8 @@ from draw_simple import *
 import numpy as np
 import math
 
-job_tag = "paper"
-job_name = "20230712-" + job_tag
+job_tag = "basic"
+job_name = "20230909-" + job_tag
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
@@ -137,7 +137,7 @@ def batch(df):
     # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "default"), "default-numa", df["tag"])
     # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "numalocal"), "default", df["tag"])
     df["inject_rate(K/s)"] = df["inject_rate(K/s)"].apply(int)
-    draw_all = False
+    draw_all = True
     # message rate
     df1_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 8 and

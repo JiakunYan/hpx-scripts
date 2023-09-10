@@ -6,7 +6,7 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230712-paper"
+name = "20230726-ucxmt"
 input_path = "run/slurm_output.*"
 output_path = "data/"
 line_patterns = [

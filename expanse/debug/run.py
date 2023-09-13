@@ -10,20 +10,21 @@ from script_common import *
 
 baseline = {
     "name": "lci",
-    "zc_threshold": 8192,
-    "parcelport": "lci",
-    "protocol": "putsendrecv",
-    "comp_type": "queue",
-    "progress_type": "rp",
-    "prg_thread_num": 1,
-    "sendimm": 1,
-    "backlog_queue": 0,
-    "prepost_recv_num": 1,
-    "zero_copy_recv": 1,
-    "match_table_type": "hashqueue",
-    "cq_type": "array_atomic_faa",
-    "reg_mem": 1,
-    "ndevices": 1
+    # "zc_threshold": 8192,
+    # "parcelport": "lci",
+    # "protocol": "putsendrecv",
+    # "comp_type": "queue",
+    # "progress_type": "rp",
+    # "prg_thread_num": 1,
+    # "sendimm": 1,
+    # "backlog_queue": 0,
+    # "prepost_recv_num": 1,
+    # "zero_copy_recv": 1,
+    # "match_table_type": "hashqueue",
+    # "cq_type": "array_atomic_faa",
+    # "reg_mem": 1,
+    # "ndevices": 1,
+    # "ncomps": 1,
 }
 
 configs = [

@@ -11,7 +11,7 @@ def get_default_config():
         "protocol": "putva",
         "comp_type": "queue",
         "progress_type": "rp",
-        "prg_thread_num": 1,
+        "prg_thread_num": "auto",
         "sendimm": 1,
         "backlog_queue": 0,
         "prepost_recv_num": 1,
@@ -20,6 +20,7 @@ def get_default_config():
         "cq_type": "array_atomic_faa",
         "reg_mem": 1,
         "ndevices": 1,
+        "ncomps": 1
     }
     return default_config
 
@@ -61,6 +62,7 @@ def get_environ_setting(config):
         ret["LCI_CQ_TYPE"] = config["cq_type"]
     if "reg_mem" in config and config["reg_mem"] or config["progress_type"] == "worker":
         ret["LCI_USE_DREG"] = "0"
+    print(ret)
     return ret
 
 
@@ -107,7 +109,8 @@ def get_hpx_cmd(executable, config):
 --hpx:ini=hpx.parcel.lci.prepost_recv_num={config["prepost_recv_num"]} \
 --hpx:ini=hpx.parcel.zero_copy_receive_optimization={config["zero_copy_recv"]} \
 --hpx:ini=hpx.parcel.lci.reg_mem={config["reg_mem"]} \
---hpx:ini=hpx.parcel.lci.ndevices={config["ndevices"]}'''
+--hpx:ini=hpx.parcel.lci.ndevices={config["ndevices"]} \
+--hpx:ini=hpx.parcel.lci.ncomps={config["ncomps"]}'''
     return cmd
 
 

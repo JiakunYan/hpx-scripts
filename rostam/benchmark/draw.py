@@ -6,8 +6,7 @@ from draw_simple import *
 import numpy as np
 import math
 
-job_tag = "basic"
-job_name = "20230909-" + job_tag
+job_name = "20230909-basic"
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
@@ -143,10 +142,7 @@ def batch(df):
                           row["nbytes"] == 8 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "_i" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_psr_cq_pin"),
-                          # row["input_inject_rate(K/s)"] != 0,
+                           row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df1 = df1_tmp.copy()
     plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-8", with_error=True)
@@ -156,35 +152,28 @@ def batch(df):
                           row["nbytes"] == 16384 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "_i" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_psr_cq_pin"),
-                          # row["input_inject_rate(K/s)"] != 0,
+                           row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df2 = df2_tmp.copy()
     plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-16384", with_error=True)
     draw_bar(df2, "name", "msg_rate(K/s)", "message_rate-16384-bar")
 
-    # latency
-    df3_tmp = df[df.apply(lambda row:
-                          row["window"] == 1 and
-                          row["nsteps"] > 1 and
-                          (draw_all or
-                           "_i" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_psr_cq_pin"),
-                          axis=1)]
-    df3 = df3_tmp.copy()
-    plot(df3, "nbytes", "latency(us)", "name", "latency", with_error=True)
+    # # latency
+    # df3_tmp = df[df.apply(lambda row:
+    #                       row["window"] == 1 and
+    #                       row["nsteps"] > 1 and
+    #                       (draw_all or
+    #                        row["name"] in ["mpi", "mpi_i", "lci"]),
+    #                       axis=1)]
+    # df3 = df3_tmp.copy()
+    # plot(df3, "nbytes", "latency(us)", "name", "latency", with_error=True)
 
     # window - latency
     df3_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 8 and
                           row["nsteps"] > 1 and
                           (draw_all or
-                           "_i" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_psr_cq_pin"),
+                           row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
     plot(df3, "window", "latency(us)", "name", "window-latency-8", with_error=True)
@@ -193,20 +182,10 @@ def batch(df):
                           row["nbytes"] == 16384 and
                           row["nsteps"] > 1 and
                           (draw_all or
-                           "_i" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_psr_cq_pin"),
+                           row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
     plot(df3, "window", "latency(us)", "name", "window-latency-16384", with_error=True)
-
-    # df3_tmp = df[df.apply(lambda row:
-    #                       row["nbytes"] == 65536 and
-    #                       row["nsteps"] > 1 and
-    #                       ("_i" in row["name"] or "mpi" in row["name"]),
-    #                       axis=1)]
-    # df3 = df3_tmp.copy()
-    # plot(df3, "window", "latency(us)", "name", "window-latency-65536", with_error=True)
 
 if __name__ == "__main__":
     df = pd.read_csv(os.path.join(input_path, job_name + ".csv"))

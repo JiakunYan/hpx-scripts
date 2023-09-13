@@ -27,6 +27,7 @@ baseline = {
 }
 
 configs = [
+    baseline
     # {**baseline, "name": "mpi", "parcelport": "mpi", "sendimm": 0},
     # {**baseline, "name": "lci_sr_sy_mt", "protocol": "sendrecv", "comp_type": "sync",
     #  "progress_type": "worker", "sendimm": 0},
@@ -49,7 +50,7 @@ configs = [
     #  "progress_type": "worker"},
     # {**baseline, "name": "lci_psr_sy_pin_i", "protocol": "putsendrecv", "comp_type": "sync"},
     # {**baseline, "name": "lci_psr_cq_mt_i", "protocol": "putsendrecv", "progress_type": "worker"},
-    {**baseline, "name": "lci_psr_cq_pin_i", "protocol": "putsendrecv"},
+    # {**baseline, "name": "lci_psr_cq_pin_i", "protocol": "putsendrecv"},
 ]
 
 if __name__ == "__main__":

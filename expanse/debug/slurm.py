@@ -18,8 +18,8 @@ baseline = {
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "worker",
-    "prg_thread_num": 1,
+    "progress_type": "rp",
+    "prg_thread_num": "auto",
     "sendimm": 1,
     "backlog_queue": 0,
     "prepost_recv_num": 1,
@@ -27,7 +27,8 @@ baseline = {
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
     "reg_mem": 1,
-    "ndevices": 8
+    "ndevices": 2,
+    "ncomps": 2,
 }
 
 configs = [
@@ -73,6 +74,6 @@ for config in configs:
     executable = os.path.realpath(os.path.join(os.environ["HOME"], "opt/hpx/local/build/bin/pingpong_performance2"))
 
     # os.environ["LCT_PCOUNTER_AUTO_DUMP"] = "run/pcounter.8b.{}.log.%".format(config["name"])
-    run_hpx(executable, config, extra_arguments=f"--window=500000 --batch-size=100 --nbytes=8 --inject-rate=0")
+    # run_hpx(executable, config, extra_arguments=f"--window=500000 --batch-size=100 --nbytes=8 --inject-rate=0")
     # os.environ["LCT_PCOUNTER_AUTO_DUMP"] = "run/pcounter.16kb.{}.log.%".format(config["name"])
-    # run_hpx(executable, config, extra_arguments=f"--window=100000 --batch-size=10 --nbytes=16384 --inject-rate=0 ")
+    run_hpx(executable, config, extra_arguments=f"--window=100000 --batch-size=10 --nbytes=16384 --inject-rate=0 ")

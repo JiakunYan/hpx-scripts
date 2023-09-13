@@ -9,12 +9,12 @@ sys.path.append("../../include")
 from script_common import *
 
 baseline = {
-    "name": "lci_psr_cq_pin_i",
+    "name": "lci",
     "zc_threshold": 8192,
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "worker",
+    "progress_type": "rp",
     "prg_thread_num": "auto",
     "sendimm": 1,
     "backlog_queue": 0,
@@ -23,7 +23,8 @@ baseline = {
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
     "reg_mem": 0,
-    "ndevices": 2
+    "ndevices": 2,
+    "ncomps": 2,
 }
 
 configs = [
@@ -33,11 +34,11 @@ configs = [
     {**baseline, "name": "lci_wo_i", "sendimm": 0},
     {**baseline, "name": "lci_sendrecv", "protocol": "sendrecv"},
     {**baseline, "name": "lci_sync", "comp_type": "sync"},
-    {**baseline, "name": "lci_worker_d1", "ndevices": 1, "progress_type": "worker"},
-    {**baseline, "name": "lci_worker_d4", "ndevices": 4, "progress_type": "worker"},
-    {**baseline, "name": "lci_rp_d1", "ndevices": 1, "progress_type": "rp"},
-    {**baseline, "name": "lci_rp_d2", "ndevices": 2, "progress_type": "rp"},
-    {**baseline, "name": "lci_rp_d4", "ndevices": 4, "progress_type": "rp"},
+    # {**baseline, "name": "lci_worker_d1", "ndevices": 1, "progress_type": "worker"},
+    # {**baseline, "name": "lci_worker_d4", "ndevices": 4, "progress_type": "worker"},
+    # {**baseline, "name": "lci_rp_d1", "ndevices": 1, "progress_type": "rp"},
+    # {**baseline, "name": "lci_rp_d2", "ndevices": 2, "progress_type": "rp"},
+    # {**baseline, "name": "lci_rp_d4", "ndevices": 4, "progress_type": "rp"},
     # {**baseline, "name": "mpi", "parcelport": "mpi", "sendimm": 0},
     # {**baseline, "name": "lci_sr_sy_mt", "protocol": "sendrecv", "comp_type": "sync",
     #  "progress_type": "worker", "sendimm": 0},

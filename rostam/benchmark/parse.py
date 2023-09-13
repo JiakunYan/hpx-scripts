@@ -7,7 +7,7 @@ import pandas as pd
 import os,sys
 
 name = "20230909-basic"
-input_path = "run/slurm_output.*"
+input_path = "run-{}/slurm_output.*".format(name)
 output_path = "data/"
 line_patterns = [
 {

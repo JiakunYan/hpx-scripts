@@ -6,8 +6,8 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230726-ucxmt"
-input_path = "run/slurm_output.*"
+name = "20230911-basic"
+input_path = "run/{}/slurm_output.*".format(name)
 output_path = "data/"
 line_patterns = [
 {
@@ -96,26 +96,38 @@ if __name__ == "__main__":
     # df = df.sort_values(by=all_labels)
     # Sort dataframe
     name_ordering = [
-        # baseline,
-        "lci",
+        # new
         "mpi",
-        "mpi_sendimm",
-        "lci_sendrecv_sync_worker",
-        "lci_sendrecv_sync_rp",
-        "lci_sendrecv_queue_worker",
-        "lci_sendrecv_queue_rp",
-        "lci_putsendrecv_sync_worker",
-        "lci_putsendrecv_sync_rp",
-        "lci_putsendrecv_queue_worker",
-        "lci_putsendrecv_queue_rp",
-        "lci_sendrecv_sync_worker_sendimm",
-        "lci_sendrecv_sync_rp_sendimm",
-        "lci_sendrecv_queue_worker_sendimm",
-        "lci_sendrecv_queue_rp_sendimm",
-        "lci_putsendrecv_sync_worker_sendimm",
-        "lci_putsendrecv_sync_rp_sendimm",
-        "lci_putsendrecv_queue_worker_sendimm",
-        "lci_putsendrecv_queue_rp_sendimm",
+        "mpi_i",
+        "lci",
+        "lci_wo_i",
+        "lci_sendrecv",
+        "lci_sync",
+        "lci_worker_d1",
+        "lci_worker_d4",
+        "lci_rp_d1",
+        "lci_rp_d2",
+        "lci_rp_d4",
+        # baseline,
+        # "lci",
+        # "mpi",
+        # "mpi_sendimm",
+        # "lci_sendrecv_sync_worker",
+        # "lci_sendrecv_sync_rp",
+        # "lci_sendrecv_queue_worker",
+        # "lci_sendrecv_queue_rp",
+        # "lci_putsendrecv_sync_worker",
+        # "lci_putsendrecv_sync_rp",
+        # "lci_putsendrecv_queue_worker",
+        # "lci_putsendrecv_queue_rp",
+        # "lci_sendrecv_sync_worker_sendimm",
+        # "lci_sendrecv_sync_rp_sendimm",
+        # "lci_sendrecv_queue_worker_sendimm",
+        # "lci_sendrecv_queue_rp_sendimm",
+        # "lci_putsendrecv_sync_worker_sendimm",
+        # "lci_putsendrecv_sync_rp_sendimm",
+        # "lci_putsendrecv_queue_worker_sendimm",
+        # "lci_putsendrecv_queue_rp_sendimm",
         # # pthread
         # "lci_sendrecv_sync_pthread",
         # "lci_sendrecv_queue_pthread",

@@ -23,22 +23,19 @@ load_module(config, build_type="release", enable_pcounter=0)
 module_list()
 
 # latency
-msg_sizes = [8, 64, 512, 4096, 32768, 262144]
-for msg_size in msg_sizes:
-    run_hpx(executable, config, extra_arguments=f"--window=1 --batch-size=1 --nbytes={int(msg_size)} --nsteps=10000")
+# msg_sizes = [8, 64, 512, 4096, 32768, 262144]
+# for msg_size in msg_sizes:
+#     run_hpx(executable, config, extra_arguments=f"--window=1 --batch-size=1 --nbytes={int(msg_size)} --nsteps=10000")
 
-windows = [1, 2, 4, 8, 16, 32, 64]
+windows = [1, 2, 4, 8, 16, 32, 64, 128]
 for window in windows:
     run_hpx(executable, config, extra_arguments=f"--window={int(window)} --batch-size=1 --nbytes=8 --nsteps=10000")
 
 for window in windows:
     run_hpx(executable, config, extra_arguments=f"--window={int(window)} --batch-size=1 --nbytes=16384 --nsteps=10000")
-#
-# for window in windows:
-#     run_hpx(executable, config, extra_arguments=f"--window={int(window)} --batch-size=1 --nbytes=65536 --nsteps=5000")
 
 # # message rate
-inject_rates = [1e5, 2e5, 4e5, 8e5, 16e5, 0]
+inject_rates = [1e5, 2e5, 4e5, 8e5, 16e5, 32e5, 0]
 for inject_rate in inject_rates:
     run_hpx(executable, config, extra_arguments=f"--window=500000 --batch-size=100 --nbytes=8 --inject-rate={int(inject_rate)}")
 

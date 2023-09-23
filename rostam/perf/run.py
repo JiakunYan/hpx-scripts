@@ -14,7 +14,7 @@ baseline = {
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "rp",
+    "progress_type": "worker",
     "prg_thread_num": "auto",
     "sendimm": 1,
     "backlog_queue": 0,
@@ -22,8 +22,10 @@ baseline = {
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
-    "reg_mem": 0,
-    "ndevices": 2
+    "reg_mem": 1,
+    "ndevices": 2,
+    "ncomps": 2,
+    "run_all": False
 }
 
 configs = [

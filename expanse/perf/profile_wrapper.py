@@ -22,11 +22,18 @@ executable = os.path.realpath(os.path.join(os.environ["HOME"], "opt/hpx/local/bu
 load_module(config, build_type="release")
 module_list()
 
+os.environ.update(get_environ_setting(config))
+platform_config = get_platform_config_all()
+numactl_cmd = ""
+if platform_config["numa_policy"] == "interleave":
+    numactl_cmd = "numactl --interleave=all"
 perf_output = f'perf.data.{os.environ["SLURM_JOB_ID"]}.{os.environ["SLURM_PROCID"]}'
+# pingpong_cmd = "--window=500000 --batch-size=100 --nbytes=8 --inject-rate=0"
+pingpong_cmd = "--window=100000 --batch-size=10 --nbytes=16384 --inject-rate=0"
 cmd = f'''
 perf record --freq=10 --call-graph dwarf -q -o {perf_output} \
-      numactl --interleave=all {get_hpx_cmd(executable, config)} \
-      --window=500000 --batch-size=100 --nbytes=8 --inject-rate=0 \
+      {numactl_cmd} {get_hpx_cmd(executable, config)} \
+      {pingpong_cmd} \
 '''
 print(cmd)
 sys.stdout.flush()

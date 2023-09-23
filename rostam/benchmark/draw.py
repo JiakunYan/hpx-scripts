@@ -5,15 +5,22 @@ sys.path.append("../../include")
 from draw_simple import *
 import numpy as np
 import math
+from itertools import chain
 
-job_name = "20230909-basic"
+job_name = "20230916-all"
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
-def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_error=True):
+def plot(df, x_key, y_key, tag_key, title,
+         filename = None, base = None, smaller_is_better = True, label_fn=None,
+         with_error=True, x_label=None, y_label=None):
     if title is None:
         title = filename
+    if x_label is None:
+        x_label = x_key
+    if y_label is None:
+        y_label = y_key
 
     df = df.sort_values(by=[tag_key, x_key])
 
@@ -25,6 +32,10 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
         for line in lines:
             line["label"] = label_fn(line["label"])
 
+    # Setup colors
+    cmap_tab20=plt.get_cmap('tab20')
+    ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
+
     # time
     for line in lines:
         if with_error:
@@ -32,111 +43,76 @@ def plot(df, x_key, y_key, tag_key, title, filename = None, label_fn=None, with_
             ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker='.', markerfacecolor='white', capsize=3)
         else:
             ax.plot(line["x"], line["y"], label=line["label"], marker='.', markerfacecolor='white')
-    ax.set_xlabel(x_key)
-    ax.set_ylabel(y_key)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
     # ax.legend(bbox_to_anchor = (1.05, 0.6))
     # ax.legend(bbox_to_anchor=(1.01, 1.01))
-    ax.legend()
-    plt.tight_layout()
 
-    if filename is None:
-        filename = title
-    if not os.path.exists(output_path):
-        os.mkdir(output_path)
-    dirname = os.path.join(output_path, job_name)
-    if not os.path.exists(dirname):
-        os.mkdir(dirname)
-    output_png_name = os.path.join(dirname, "{}.png".format(filename))
-    fig.savefig(output_png_name)
-    output_json_name = os.path.join(dirname, "{}.json".format(filename))
-    with open(output_json_name, 'w') as outfile:
-        json.dump({"Time": lines}, outfile)
+    # speedup
+    baseline = None
+    ax2 = None
+    speedup_lines = None
+    for line in lines:
+        if base == line["label"]:
+            baseline = line
+            break
+    if baseline:
+        ax2 = ax.twinx()
+        speedup_lines = []
+        for line in lines:
+            if line['label'] == baseline['label']:
+                ax2.plot(line["x"], [1 for x in range(len(line["x"]))], linestyle='dashed')
+                continue
+            if smaller_is_better:
+                speedup = [float(x) / float(b) for x, b in zip(line["y"], baseline["y"])]
+                label = "{} / {}".format(line['label'], baseline['label'])
+            else:
+                speedup = [float(b) / float(x) for x, b in zip(line["y"], baseline["y"])]
+                label = "{} / {}".format(baseline['label'], line['label'])
+            speedup_lines.append({"label": line["label"], "x": line["x"], "y": speedup})
+            ax2.plot(line["x"], speedup, label=label, marker='.', markerfacecolor='white', linestyle='dashed')
+        ax2.set_ylabel("Speedup")
+    # ax2.legend()
 
-def draw_bar(df, x_key, y_keys, title, x_include=None, color_map=None, filename=None, label_fn=None):
-    if type(y_keys) != list:
-        y_keys = [y_keys]
-
-    if x_include:
-        xs = list(x_include)
+    # ask matplotlib for the plotted objects and their labels
+    if ax2:
+        lines1, labels1 = ax.get_legend_handles_labels()
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        ax2.legend(lines1 + lines2, labels1 + labels2, loc=0)
     else:
-        xs = list(df[x_key].unique())
-
-    ys_dict = {}
-    # errors_dict = {}
-    colors_dict = {}
-    for y_key in y_keys:
-        ys = []
-        # errors = []
-        colors = []
-        for x in xs:
-            y = df[df[x_key] == x].max(numeric_only=True)[y_key]
-            # error = df[df[x_key] == x].std(numeric_only=True)[y_key]
-            if y is np.nan:
-                continue
-            if y == 0:
-                continue
-            ys.append(float(y))
-            # errors.append(float(error))
-            if color_map:
-                colors.append(color_map[x])
-        ys_dict[y_key] = ys
-        # errors_dict[y_key] = errors
-        colors_dict[y_key] = colors
-
-    # update labels
-    if label_fn is not None:
-        xs = list(map(label_fn, xs))
-
-    fig, ax = plt.subplots()
-    # fig, ax = plt.subplots(figsize=(10, len(xs) * 0.3 + 1))
-    bottom = np.zeros(len(xs))
-
-    bar = None
-    for y_key in y_keys:
-        if colors_dict[y_key]:
-            bar = ax.barh(xs, ys_dict[y_key], color=colors_dict[y_key], edgecolor="black", left=bottom)
-        else:
-            bar = ax.barh(xs, ys_dict[y_key], edgecolor="black", left=bottom)
-        bottom += ys_dict[y_key]
-
-    # Add actual number to the bar
-    for i, rect in enumerate(bar):
-        text = []
-        total = 0
-        for y_key in y_keys:
-            total += ys_dict[y_key][i]
-            text.append(f'{ys_dict[y_key][i]:.2f}')
-        if len(text) > 1:
-            text.append(f'{total:.2f}')
-        text = "/".join(text)
-        ax.text(bottom[i], rect.get_y() + rect.get_height() / 2.0,
-                text, ha='left', va='center')
-    ax.set_title(title)
-    ax.invert_yaxis()  # labels read top-to-bottom
+        ax.legend()
+    ax.tick_params(axis='y', which='both', labelsize="small")
+    ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
+    ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
     plt.tight_layout()
 
     if filename is None:
         filename = title
+
     if not os.path.exists(output_path):
         os.mkdir(output_path)
     dirname = os.path.join(output_path, job_name)
     if not os.path.exists(dirname):
         os.mkdir(dirname)
     output_png_name = os.path.join(dirname, "{}.png".format(filename))
-    fig.savefig(output_png_name)
+    fig.savefig(output_png_name, bbox_inches='tight')
     output_json_name = os.path.join(dirname, "{}.json".format(filename))
     with open(output_json_name, 'w') as outfile:
-        # json.dump({"xs": xs, "ys": ys_dict, "errors": errors_dict}, outfile)
-        json.dump({"xs": xs, "ys": ys_dict}, outfile)
+        json.dump({"Time": lines, "Speedup": speedup_lines}, outfile)
 
 def batch(df):
-    # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "default"), "default-numa", df["tag"])
-    # df["tag"] = np.where((df["parcelport"] == "lci") & (df["tag"] == "numalocal"), "default", df["tag"])
-    df["inject_rate(K/s)"] = df["inject_rate(K/s)"].apply(int)
-    draw_all = True
+    def format_inject_rate(row):
+        ratio = row["input_inject_rate(1/s)"] / 1e3 / row["inject_rate(K/s)"]
+        if abs(1 - ratio) <= 0.05:
+            return row["input_inject_rate(1/s)"] / 1e3
+        else:
+            return row["inject_rate(K/s)"]
+
+    df["inject_rate(K/s)"] = df.apply(format_inject_rate, axis=1)
+    draw_all = False
     # message rate
     df1_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 8 and
@@ -145,8 +121,10 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df1 = df1_tmp.copy()
-    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-8", with_error=True)
-    draw_bar(df1, "name", "msg_rate(K/s)", "message_rate-8-bar")
+    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
+         filename="message_rate-8", base="lci", smaller_is_better=False, with_error=True,
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
+    # draw_bar(df1, "name", "msg_rate(K/s)", "Maximum Message Rate (8B)", filename="message_rate-8-bar", label_fn=label_fn)
 
     df2_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
@@ -155,18 +133,10 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df2 = df2_tmp.copy()
-    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "message_rate-16384", with_error=True)
-    draw_bar(df2, "name", "msg_rate(K/s)", "message_rate-16384-bar")
-
-    # # latency
-    # df3_tmp = df[df.apply(lambda row:
-    #                       row["window"] == 1 and
-    #                       row["nsteps"] > 1 and
-    #                       (draw_all or
-    #                        row["name"] in ["mpi", "mpi_i", "lci"]),
-    #                       axis=1)]
-    # df3 = df3_tmp.copy()
-    # plot(df3, "nbytes", "latency(us)", "name", "latency", with_error=True)
+    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
+         filename="message_rate-16384", base="lci", smaller_is_better=False, with_error=True,
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
+    # draw_bar(df2, "name", "msg_rate(K/s)", "Maximum Message Rate (16KiB)", filename="message_rate-16384-bar", label_fn=label_fn)
 
     # window - latency
     df3_tmp = df[df.apply(lambda row:
@@ -176,7 +146,9 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "window-latency-8", with_error=True)
+    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (8B)",
+         filename="window-latency-8", base="lci", with_error=True,
+         x_label="Window Size", y_label="Latency (us)")
 
     df3_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
@@ -185,7 +157,9 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "window-latency-16384", with_error=True)
+    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (16KiB)",
+         filename="window-latency-16384", base="lci", with_error=True,
+         x_label="Window Size", y_label="Latency (us)")
 
 if __name__ == "__main__":
     df = pd.read_csv(os.path.join(input_path, job_name + ".csv"))

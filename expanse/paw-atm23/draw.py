@@ -14,8 +14,7 @@ from draw_simple import *
 import numpy as np
 import math
 
-job_tag = "final"
-job_name = "paw-atm23-" + job_tag
+job_name = "paw-atm23-camera-ready"
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
@@ -132,35 +131,62 @@ def batch(df):
     df["inject_rate(K/s)"] = df.apply(format_inject_rate, axis=1)
     draw_all = False
     # message rate
+    # small message rate
     df1_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 8 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           "mpi" in row["name"] or
+                           row["name"] in ["lci_putsendrecv_queue_rp", "lci_putsendrecv_queue_rp_sendimm"]),
                           # row["input_inject_rate(K/s)"] != 0,
                           axis=1)]
     df1 = df1_tmp.copy()
     plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
-         filename="message_rate-8", with_error=True, label_fn=label_fn,
+         filename="message_rate-8-brief", with_error=True, label_fn=label_fn,
          x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
-         draw_y_max=True)
+         draw_y_max=False)
 
+    df1_tmp = df[df.apply(lambda row:
+                          row["nbytes"] == 8 and
+                          row["nsteps"] == 1 and
+                          (draw_all or
+                           "sendimm" in row["name"] and
+                           "lci" in row["name"]),
+                          # row["input_inject_rate(K/s)"] != 0,
+                          axis=1)]
+    df1 = df1_tmp.copy()
+    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
+         filename="message_rate-8-config", with_error=True, label_fn=label_fn,
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
+         draw_y_max=False)
+
+    # large message rate
     df2_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
                           row["nsteps"] == 1 and
                           (draw_all or
-                           "sendimm" in row["name"]
-                           or "mpi" in row["name"]
-                           or row["name"] == "lci_putsendrecv_queue_rp"),
+                           "mpi" in row["name"] or
+                           row["name"] in ["lci_putsendrecv_queue_rp", "lci_putsendrecv_queue_rp_sendimm"]),
                           # row["input_inject_rate(K/s)"] != 0,
                           axis=1)]
     df2 = df2_tmp.copy()
     plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
-         filename="message_rate-16384", with_error=True, label_fn=label_fn,
+         filename="message_rate-16384-brief", with_error=True, label_fn=label_fn,
          x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
-         draw_y_max=True)
+         draw_y_max=False)
+    df2_tmp = df[df.apply(lambda row:
+                          row["nbytes"] == 16384 and
+                          row["nsteps"] == 1 and
+                          (draw_all or
+                           "sendimm" in row["name"] and
+                           "lci" in row["name"]),
+                          # row["input_inject_rate(K/s)"] != 0,
+                          axis=1)]
+    df2 = df2_tmp.copy()
+    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
+         filename="message_rate-16384-config", with_error=True, label_fn=label_fn,
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)",
+         draw_y_max=False)
 
     # latency
     df3_tmp = df[df.apply(lambda row:

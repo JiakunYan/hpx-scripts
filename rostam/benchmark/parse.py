@@ -6,8 +6,8 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230909-basic"
-input_path = "run-{}/slurm_output.*".format(name)
+name = "20230916-all"
+input_path = "run/{}/slurm_output.*".format(name)
 output_path = "data/"
 line_patterns = [
 {
@@ -20,7 +20,7 @@ line_patterns = [
 },
 {
     "format": ".*--inject-rate=(\d+).*",
-    "label": ["input_inject_rate(K/s)"]
+    "label": ["input_inject_rate(1/s)"]
 },
 {
     "format": "nbytes=(\S+)",
@@ -92,92 +92,7 @@ if __name__ == "__main__":
                             else:
                                 df = pd.concat([df, new_df], ignore_index=True)
 
-    # df = df[all_labels]
-    # df = df.sort_values(by=all_labels)
-    # Sort dataframe
-    name_ordering = [
-        # new
-        "lci",
-        "mpi",
-        "mpi_i",
-        "lci_wo_i",
-        "lci_sendrecv",
-        "lci_sync",
-        "lci_worker_d1",
-        "lci_worker_d4",
-        "lci_rp_d1",
-        "lci_rp_d2",
-        "lci_rp_d4",
-        # baseline,
-        # "lci",
-        # "mpi",
-        # "mpi_i",
-        # "lci_sr_sy_mt",
-        # "lci_sr_sy_pin",
-        # "lci_sr_cq_mt",
-        # "lci_sr_cq_pin",
-        # "lci_psr_sy_mt",
-        # "lci_psr_sy_pin",
-        # "lci_psr_cq_mt",
-        # "lci_psr_cq_pin",
-        # "lci_sr_sy_mt_i",
-        # "lci_sr_sy_pin_i",
-        # "lci_sr_cq_mt_i",
-        # "lci_sr_cq_pin_i",
-        # "lci_psr_sy_mt_i",
-        # "lci_psr_sy_pin_i",
-        # "lci_psr_cq_mt_i",
-        # "lci_psr_cq_pin_i",
-        # # pthread
-        # "lci_sr_sy_pthread",
-        # "lci_sr_cq_pthread",
-        # "lci_sr_sy_pthread_i",
-        # "lci_sr_cq_pthread_i",
-        # "lci_psr_sy_pthread",
-        # "lci_psr_sy_pthread_i",
-        # "lci_psr_cq_pthread",
-        # "lci_psr_cq_pthread_i",
-        # # putva
-        # "lci_putva_sy_mt",
-        # "lci_putva_sy_mt_i",
-        # "lci_putva_cq_mt_i",
-        # "lci_putva_cq_pin_i",
-        # # backlog queue
-        # "lci_sr_sy_mt_bq",
-        # "lci_sr_sy_mt_i_bq",
-        # "lci_psr_cq_pin_i_bq",
-        # # 2 devices
-        # "lci_putva_cq_mt_i_2dev",
-        # "lci_putva_cq_pin_i_2dev",
-        # # prepost receives
-        # "lci_sr_sy_mt_post8",
-        # "lci_sr_cq_mt_post8",
-        # "lci_sr_sy_mt_i_post8",
-        # "lci_sr_cq_mt_i_post8",
-        # # No zero-copy receives
-        # "mpi_nozcr",
-        # "lci_psr_cq_pin_i_nozcr",
-        # # Match table
-        # "lci_sr_sy_mt_i_hash",
-        # "lci_psr_cq_mt_i_hash",
-        # "lci_sr_sy_mt_i_mqueue",
-        # "lci_psr_cq_mt_i_mqueue",
-        # "lci_sr_sy_pin_i_hash",
-        # "lci_psr_cq_pin_i_hash",
-        # "lci_sr_sy_pin_i_mqueue",
-        # "lci_psr_cq_pin_i_mqueue",
-        # # Others
-        # "lci_putva_sy_pthread",
-        # "lci_putva_sy_pin",
-        # "lci_putva_sy_pthread_i",
-        # "lci_putva_sy_pin_i",
-        # "lci_putva_cq_mt",
-        # "lci_putva_cq_pthread",
-        # "lci_putva_cq_pin",
-        # "lci_putva_cq_pthread_i",
-    ]
-    df["name"] = pd.Categorical(df["name"], name_ordering)
-    df = df.sort_values(by=["name", "inject_rate(K/s)"])
+    df = df.sort_values(by=["inject_rate(K/s)"])
 
     if df.shape[0] == 0:
         print("Error! Get 0 entries!")

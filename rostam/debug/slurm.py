@@ -18,15 +18,16 @@ baseline = {
     "parcelport": "lci",
     "protocol": "putsendrecv",
     "comp_type": "queue",
-    "progress_type": "rp",
+    "progress_type": "worker",
     "prg_thread_num": "auto",
-    "sendimm": 0,
+    "sendimm": 1,
     "backlog_queue": 0,
     "prepost_recv_num": 1,
     "zero_copy_recv": 1,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
-    "reg_mem": 0,
+    "reg_mem": 1,
+    "mem_reg_cache": 1,
     "ndevices": 2,
     "ncomps": 2
 }
@@ -68,7 +69,7 @@ os.environ["UCX_WARN_UNUSED_ENV_VARS"] = "n"
 
 for config in configs:
     # load modules
-    load_module(config, build_type="release", enable_pcounter=False)
+    load_module(config, build_type="release", enable_pcounter=False, extra=["ucx"])
     module_list()
     print(config)
     executable = os.path.realpath(os.path.join(os.environ["HOME"], "opt/hpx/local/build/bin/pingpong_performance2"))

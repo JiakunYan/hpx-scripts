@@ -62,6 +62,8 @@ def get_environ_setting(config):
         ret["LCI_CQ_TYPE"] = config["cq_type"]
     if "reg_mem" in config and config["reg_mem"] or config["progress_type"] == "worker":
         ret["LCI_USE_DREG"] = "0"
+    if "mem_reg_cache" in config:
+        ret["LCI_USE_DREG"] = str(config["mem_reg_cache"])
     print(ret)
     return ret
 
@@ -88,6 +90,10 @@ def load_module(config, build_type = "release", enable_pcounter = False, extra=N
 
 
 def get_hpx_cmd(executable, config):
+    agas_use_caching = 0
+    if "agas_caching" in config:
+        agas_use_caching = config["agas_caching"]
+
     prg_thread_num = 1
     if "prg_thread_num" in config:
         if config["prg_thread_num"] == "auto":
@@ -99,7 +105,7 @@ def get_hpx_cmd(executable, config):
 --hpx:ini=hpx.parcel.{config["parcelport"]}.priority=1000 \
 --hpx:ini=hpx.parcel.{config["parcelport"]}.zero_copy_serialization_threshold={config["zc_threshold"]} \
 --hpx:threads={get_nthreads(config)} \
---hpx:ini=hpx.agas.use_caching=0 \
+--hpx:ini=hpx.agas.use_caching={agas_use_caching} \
 --hpx:ini=hpx.parcel.lci.protocol={config["protocol"]} \
 --hpx:ini=hpx.parcel.lci.comp_type={config["comp_type"]} \
 --hpx:ini=hpx.parcel.lci.progress_type={config["progress_type"]} \

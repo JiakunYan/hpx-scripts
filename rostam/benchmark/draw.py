@@ -6,15 +6,16 @@ from draw_simple import *
 import numpy as np
 import math
 from itertools import chain
+import itertools
 
-job_name = "20230916-all"
+job_name = "20231001-all"
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
 
 def plot(df, x_key, y_key, tag_key, title,
          filename = None, base = None, smaller_is_better = True, label_fn=None,
-         with_error=True, x_label=None, y_label=None):
+         with_error=True, x_label=None, y_label=None, position="all"):
     if title is None:
         title = filename
     if x_label is None:
@@ -33,18 +34,21 @@ def plot(df, x_key, y_key, tag_key, title,
             line["label"] = label_fn(line["label"])
 
     # Setup colors
-    cmap_tab20=plt.get_cmap('tab20')
-    ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
-
+    # cmap_tab20=plt.get_cmap('tab20')
+    # ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
+    markers = itertools.cycle(('.', 'o', 'v', ',', '+'))
     # time
     for line in lines:
+        marker = next(markers)
+        line["marker"] = marker
         if with_error:
             line["error"] = [0 if math.isnan(x) else x for x in line["error"]]
-            ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker='.', markerfacecolor='white', capsize=3)
+            ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker=marker, markerfacecolor='white', capsize=3)
         else:
-            ax.plot(line["x"], line["y"], label=line["label"], marker='.', markerfacecolor='white')
+            ax.plot(line["x"], line["y"], label=line["label"], marker=marker, markerfacecolor='white')
     ax.set_xlabel(x_label)
-    ax.set_ylabel(y_label)
+    if position == "all" or position == "left":
+        ax.set_ylabel(y_label)
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_title(title)
@@ -73,8 +77,9 @@ def plot(df, x_key, y_key, tag_key, title,
                 speedup = [float(b) / float(x) for x, b in zip(line["y"], baseline["y"])]
                 label = "{} / {}".format(baseline['label'], line['label'])
             speedup_lines.append({"label": line["label"], "x": line["x"], "y": speedup})
-            ax2.plot(line["x"], speedup, label=label, marker='.', markerfacecolor='white', linestyle='dashed')
-        ax2.set_ylabel("Speedup")
+            ax2.plot(line["x"][:len(speedup)], speedup, label=label, marker=line["marker"], markerfacecolor='white', linestyle='dashed')
+        if position == "all" or position == "right":
+            ax2.set_ylabel("Speedup")
     # ax2.legend()
 
     # ask matplotlib for the plotted objects and their labels
@@ -87,6 +92,7 @@ def plot(df, x_key, y_key, tag_key, title,
     ax.tick_params(axis='y', which='both', labelsize="small")
     ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
     ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+
     plt.tight_layout()
 
     if filename is None:
@@ -123,7 +129,7 @@ def batch(df):
     df1 = df1_tmp.copy()
     plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
          filename="message_rate-8", base="lci", smaller_is_better=False, with_error=True,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)", position="right")
     # draw_bar(df1, "name", "msg_rate(K/s)", "Maximum Message Rate (8B)", filename="message_rate-8-bar", label_fn=label_fn)
 
     df2_tmp = df[df.apply(lambda row:
@@ -135,7 +141,7 @@ def batch(df):
     df2 = df2_tmp.copy()
     plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
          filename="message_rate-16384", base="lci", smaller_is_better=False, with_error=True,
-         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)")
+         x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)", position="right")
     # draw_bar(df2, "name", "msg_rate(K/s)", "Maximum Message Rate (16KiB)", filename="message_rate-16384-bar", label_fn=label_fn)
 
     # window - latency
@@ -148,7 +154,7 @@ def batch(df):
     df3 = df3_tmp.copy()
     plot(df3, "window", "latency(us)", "name", "Latency w/ Window (8B)",
          filename="window-latency-8", base="lci", with_error=True,
-         x_label="Window Size", y_label="Latency (us)")
+         x_label="Window Size", y_label="Latency (us)", position="right")
 
     df3_tmp = df[df.apply(lambda row:
                           row["nbytes"] == 16384 and
@@ -159,7 +165,7 @@ def batch(df):
     df3 = df3_tmp.copy()
     plot(df3, "window", "latency(us)", "name", "Latency w/ Window (16KiB)",
          filename="window-latency-16384", base="lci", with_error=True,
-         x_label="Window Size", y_label="Latency (us)")
+         x_label="Window Size", y_label="Latency (us)", position="right")
 
 if __name__ == "__main__":
     df = pd.read_csv(os.path.join(input_path, job_name + ".csv"))

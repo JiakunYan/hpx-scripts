@@ -16,6 +16,7 @@ def get_default_config():
         "backlog_queue": 0,
         "prepost_recv_num": 1,
         "zero_copy_recv": 1,
+        "in_buffer_assembly": 1,
         "match_table_type": "hashqueue",
         "cq_type": "array_atomic_faa",
         "reg_mem": 1,
@@ -116,7 +117,8 @@ def get_hpx_cmd(executable, config):
 --hpx:ini=hpx.parcel.zero_copy_receive_optimization={config["zero_copy_recv"]} \
 --hpx:ini=hpx.parcel.lci.reg_mem={config["reg_mem"]} \
 --hpx:ini=hpx.parcel.lci.ndevices={config["ndevices"]} \
---hpx:ini=hpx.parcel.lci.ncomps={config["ncomps"]}'''
+--hpx:ini=hpx.parcel.lci.ncomps={config["ncomps"]} \
+--hpx:ini=hpx.parcel.lci.enable_in_buffer_assembly={config["in_buffer_assembly"]}'''
     return cmd
 
 

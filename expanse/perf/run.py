@@ -19,13 +19,14 @@ baseline = {
     "sendimm": 1,
     "backlog_queue": 0,
     "prepost_recv_num": 1,
-    "zero_copy_recv": 1,
+    "zero_copy_recv": 0,
     "match_table_type": "hashqueue",
     "cq_type": "array_atomic_faa",
     "reg_mem": 1,
-    "ndevices": 4,
+    "ndevices": 2,
     "ncomps": 1,
-    "run_all": 0
+    "run_all": 0,
+    "mem_reg_cache": 1
 }
 
 configs = [

@@ -6,7 +6,7 @@ import ast
 import pandas as pd
 import os,sys
 
-name = "20230916-all"
+name = "20231001-all"
 input_path = "run/{}/slurm_output.*".format(name)
 output_path = "data/"
 line_patterns = [

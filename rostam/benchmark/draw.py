@@ -8,7 +8,7 @@ import math
 from itertools import chain
 import itertools
 
-job_name = "20231001-all"
+job_name = "20231004-final"
 input_path = "data/"
 output_path = "draw/"
 all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "msg_rate(K/s)", "bandwidth(MB/s)"]
@@ -16,8 +16,6 @@ all_labels = ["name", "nbytes", "input_inject_rate(K/s)", "inject_rate(K/s)", "m
 def plot(df, x_key, y_key, tag_key, title,
          filename = None, base = None, smaller_is_better = True, label_fn=None,
          with_error=True, x_label=None, y_label=None, position="all"):
-    if title is None:
-        title = filename
     if x_label is None:
         x_label = x_key
     if y_label is None:
@@ -25,8 +23,8 @@ def plot(df, x_key, y_key, tag_key, title,
 
     df = df.sort_values(by=[tag_key, x_key])
 
-    # fig, ax = plt.subplots(figsize=(15, 10))
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(4.8, 3.6))
     lines = parse_tag(df, x_key, y_key, tag_key)
     # update labels
     if label_fn is not None:
@@ -36,16 +34,16 @@ def plot(df, x_key, y_key, tag_key, title,
     # Setup colors
     # cmap_tab20=plt.get_cmap('tab20')
     # ax.set_prop_cycle(color=[cmap_tab20(i) for i in chain(range(0, 20, 2), range(1, 20, 2))])
-    markers = itertools.cycle(('.', 'o', 'v', ',', '+'))
+    markers = itertools.cycle(('D', 'o', 'v', ',', '+'))
     # time
     for line in lines:
         marker = next(markers)
         line["marker"] = marker
         if with_error:
             line["error"] = [0 if math.isnan(x) else x for x in line["error"]]
-            ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker=marker, markerfacecolor='white', capsize=3)
+            ax.errorbar(line["x"], line["y"], line["error"], label=line["label"], marker=marker, markerfacecolor='white', capsize=3, markersize=8, linewidth=2)
         else:
-            ax.plot(line["x"], line["y"], label=line["label"], marker=marker, markerfacecolor='white')
+            ax.plot(line["x"], line["y"], label=line["label"], marker=marker, markerfacecolor='white', markersize=8, linewidth=2)
     ax.set_xlabel(x_label)
     if position == "all" or position == "left":
         ax.set_ylabel(y_label)
@@ -68,7 +66,7 @@ def plot(df, x_key, y_key, tag_key, title,
         speedup_lines = []
         for line in lines:
             if line['label'] == baseline['label']:
-                ax2.plot(line["x"], [1 for x in range(len(line["x"]))], linestyle='dashed')
+                ax2.plot(line["x"], [1 for x in range(len(line["x"]))], linestyle='dotted')
                 continue
             if smaller_is_better:
                 speedup = [float(x) / float(b) for x, b in zip(line["y"], baseline["y"])]
@@ -77,7 +75,7 @@ def plot(df, x_key, y_key, tag_key, title,
                 speedup = [float(b) / float(x) for x, b in zip(line["y"], baseline["y"])]
                 label = "{} / {}".format(baseline['label'], line['label'])
             speedup_lines.append({"label": line["label"], "x": line["x"], "y": speedup})
-            ax2.plot(line["x"][:len(speedup)], speedup, label=label, marker=line["marker"], markerfacecolor='white', linestyle='dashed')
+            ax2.plot(line["x"][:len(speedup)], speedup, label=label, marker=line["marker"], markerfacecolor='white', linestyle='dotted', markersize=8, linewidth=2)
         if position == "all" or position == "right":
             ax2.set_ylabel("Speedup")
     # ax2.legend()
@@ -89,9 +87,9 @@ def plot(df, x_key, y_key, tag_key, title,
         ax2.legend(lines1 + lines2, labels1 + labels2, loc=0)
     else:
         ax.legend()
-    ax.tick_params(axis='y', which='both', labelsize="small")
-    ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
-    ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
+    ax.tick_params(axis='y', which='both')
+    # ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
+    # ax.yaxis.set_major_formatter(FormatStrFormatter("%.1f"))
 
     plt.tight_layout()
 
@@ -127,7 +125,7 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df1 = df1_tmp.copy()
-    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (8B)",
+    plot(df1, "inject_rate(K/s)", "msg_rate(K/s)", "name", None,
          filename="message_rate-8", base="lci", smaller_is_better=False, with_error=True,
          x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)", position="right")
     # draw_bar(df1, "name", "msg_rate(K/s)", "Maximum Message Rate (8B)", filename="message_rate-8-bar", label_fn=label_fn)
@@ -139,7 +137,7 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df2 = df2_tmp.copy()
-    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", "Message Rate (16KiB)",
+    plot(df2, "inject_rate(K/s)", "msg_rate(K/s)", "name", None,
          filename="message_rate-16384", base="lci", smaller_is_better=False, with_error=True,
          x_label="Achieved Injection Rate (K/s)", y_label="Achieved Message Rate (K/s)", position="right")
     # draw_bar(df2, "name", "msg_rate(K/s)", "Maximum Message Rate (16KiB)", filename="message_rate-16384-bar", label_fn=label_fn)
@@ -152,7 +150,7 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (8B)",
+    plot(df3, "window", "latency(us)", "name", None,
          filename="window-latency-8", base="lci", with_error=True,
          x_label="Window Size", y_label="Latency (us)", position="right")
 
@@ -163,7 +161,7 @@ def batch(df):
                            row["name"] in ["mpi", "mpi_i", "lci"]),
                           axis=1)]
     df3 = df3_tmp.copy()
-    plot(df3, "window", "latency(us)", "name", "Latency w/ Window (16KiB)",
+    plot(df3, "window", "latency(us)", "name", None,
          filename="window-latency-16384", base="lci", with_error=True,
          x_label="Window Size", y_label="Latency (us)", position="right")
 

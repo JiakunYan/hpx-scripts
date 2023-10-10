@@ -46,7 +46,7 @@ for window in windows:
 for window in windows:
     run_hpx(executable, config, extra_arguments=f"--window={int(window)} --batch-size=1 --nbytes=16384 --nsteps=10000")
 
-# # message rate
+# message rate
 if run_all:
     inject_rates = [1e5, 2e5, 4e5, 8e5, 16e5, 32e5, 0]
 else:
